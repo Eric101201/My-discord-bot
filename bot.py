@@ -33,6 +33,7 @@ async def on_ready():
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
+    print(f'prefix:{prefix}')
     print('========OwO========')
 
 #    while 1:

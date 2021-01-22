@@ -5,7 +5,7 @@ class admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name='ticket', help='test1')
     @commands.has_permissions(administrator=True)
     async def ticket(self, ctx):
         title = "心裡有話沒地方說嗎?"

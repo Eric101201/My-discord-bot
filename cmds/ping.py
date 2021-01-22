@@ -10,7 +10,7 @@ class ping(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name='ping', help='機器人延遲')
     async def ping(self, ctx):
         t1 = time.perf_counter()
         await ctx.trigger_typing()

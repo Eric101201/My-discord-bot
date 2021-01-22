@@ -7,7 +7,7 @@ class vote(commands.Cog):
         self.bot = bot
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command()
+    @commands.command(name='vote', help='投票功能 <主題> <選項1> <選項2>')
     async def vote(self, ctx, title, list_1, list_2):
         await ctx.send(f'📝{title}')
         embed=discord.Embed(title=f'{title}',description="", color=0x15caea)

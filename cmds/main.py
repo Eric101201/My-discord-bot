@@ -9,7 +9,7 @@ class Main(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(name='開啟',help='開啟頻道 <頻道名稱>')
     @commands.guild_only()
     @commands.bot_has_guild_permissions(manage_channels=True)
     async def 開啟(self, ctx, *, name):
@@ -24,7 +24,7 @@ class Main(commands.Cog):
         await channel.send(f"{ctx.author.mention} 您已開啟新的匿名頻道 請輸入匿名的內容.")
         await channel.send("***小提示:此頻道只能交給管理員關閉,輸入完畢請標註***  `@♕蹦蹦老大♕` ***並等待管理員處理***")
 
-    @commands.command()
+    @commands.command(name='關閉',help='關閉頻道 **務必在想關閉的頻道內**')
     @commands.has_guild_permissions(administrator=True)
     @commands.has_any_role('owo', 'Bot')
     @commands.guild_only()
@@ -34,7 +34,7 @@ class Main(commands.Cog):
         channel = channel or ctx.channel
         await channel.delete(reason=reason)
 
-    @commands.command()
+    @commands.command(name='上鎖',help='上鎖頻道 **務必在想上鎖的頻道內**')
     @commands.has_guild_permissions(administrator=True)
     @commands.has_any_role('owo', 'Bot')
     @commands.guild_only()
@@ -58,7 +58,7 @@ class Main(commands.Cog):
         else:
             await ctx.send(f"您已將 `{channel.name}` 上鎖.")
 
-    @commands.command()
+    @commands.command(name='解鎖', help='上鎖頻道 **務必在想解鎖的頻道內**')
     @commands.has_guild_permissions(administrator=True)
     @commands.has_any_role('owo', 'Bot')
     @commands.guild_only()

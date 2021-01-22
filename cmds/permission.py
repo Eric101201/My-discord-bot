@@ -14,21 +14,21 @@ class permission(commands.Cog):
         self.bot = bot
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command(name='reload',help='Cog mod重新裝載')
+    @commands.command(name='reload',help='重新載入 <Cog mod>')
     async def reload(self, ctx, extension):
         self.bot.reload_extension(f"cmds.{extension}")
         # console message
         await ctx.send(f"`{extension} 已重新載入。`")
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command(name='load',help='Cog mod裝入')
+    @commands.command(name='load',help='載入 <Cog mod>')
     async def load(self, ctx, extension):
         self.bot.load_extension(f"cmds.{extension}")
         # console message
         await ctx.send(f"`{extension} 已載入。`")
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command(name='unload',help='Cog mod移除')
+    @commands.command(name='unload',help='移除 <Cog mod>')
     async def unload(self, ctx, extension):
         self.bot.unload_extension(f"cmds.{extension}")
         # console message
@@ -41,21 +41,21 @@ class permission(commands.Cog):
         # console message
         await self.bot.close()
 
-    @commands.command()
+    @commands.command(name='kick', help='踢出使用者 <tag user> <原因>')
     @commands.has_guild_permissions(administrator=True)
     @has_permissions(manage_roles=True, ban_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await ctx.send(f'已踢出 {member.name} 用戶 原因: {reason}')
         await member.kick(eason=reason)
 
-    @commands.command()
+    @commands.command(name='ban', help='封鎖使用者 <tag user> <原因>')
     @commands.has_guild_permissions(administrator=True)
     @has_permissions(manage_roles=True, ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         await ctx.send(f'已封鎖 {member.name} 用戶 原因: {reason}')
         await member.ban(reason=reason)
 
-    @commands.command()
+    @commands.command(name='unban', help='解除封鎖使用者 <tag user> <原因>')
     @commands.has_guild_permissions(administrator=True)
     @has_permissions(manage_roles=True, ban_members=True)
     async def unban(self, ctx, *, member):
@@ -71,7 +71,7 @@ class permission(commands.Cog):
                 return
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command()
+    @commands.command(name='clean', help='刪除文字 <刪除數量>')
     async def clean(self, ctx, amount=0):
         await ctx.channel.purge(limit=amount+1)
         embed = discord.Embed(
