@@ -1,0 +1,268 @@
+import discord
+import json
+import time
+import random
+import psutil
+import platform
+
+from discord.ext import commands
+from datetime import datetime
+
+with open('setting.json', 'r', encoding='utf8') as jfile:
+    jdata = json.load(jfile)
+
+def get_size(bytes, suffix="B"):
+    factor = 1024
+    for unit in ["", "K", "M", "G", "T", "P"]:
+        if bytes < factor:
+            return f"{bytes:.2f}{unit}{suffix}"
+        bytes /= factor
+
+class Event(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        channel = self.bot.get_channel(int(jdata['Join_channel']))
+
+        _weekday = {
+            0: '星期一',
+            1: '星期二',
+            2: '星期三',
+            3: '星期四',
+            4: '星期五',
+            5: '星期六',
+            6: '星期日'
+        }
+
+        #格林威治天文臺時間
+        t = time.gmtime(time.time())
+
+        #月份天數陣列
+        day = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        #轉成代數
+        y = t.tm_year
+        M = t.tm_mon
+        d = t.tm_mday
+        h = t.tm_hour + 8
+        m = t.tm_min
+        s = t.tm_sec
+
+        #判斷潤平年
+        if y % 400 == 0:
+            day[2] = 29
+        elif y % 100 == 0:
+            day[2] = 28
+        elif y % 4 == 0:
+            day[2] = 29
+        else:
+            day[2] = 28
+
+#處裡跨月跨年狀況
+        d = d + int(h / 24)
+        h = h % 24
+        tm = day[M]
+        M = M + int(d / tm)
+        d = d % tm
+        y = y + int(M / 12)
+        M = M % 12
+
+        #s 秒
+        #m 分
+        #h 時
+        #d 日
+        #M 月
+        #y 年
+
+        g = (_weekday[datetime.today().weekday()])
+        txt = "{}:{}:{}"
+        txt2 = "{}年{}月{}日 {}"
+        print(f"歡迎加入{member}您加入時間: \n" + txt.format(h, m, s) + "/" +
+              txt2.format(y, M, d, g))
+
+        embed = discord.Embed(
+            title="", description="", color=(random.choice(jdata['顏色'])))
+        embed.set_author(
+            name="OwO Bot",
+            url="https://discord.gg/nRa2994",
+            icon_url=
+            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
+        )
+        embed.add_field(
+            name='歡迎加入同樂群組',
+            value='歡迎您加入同樂群組,跟我們大家一起玩OwO!\n\n'
+            f':woman_raising_hand:加入成員名稱:  {member.mention}\n:clock3:加入時間: ' +
+            txt.format(h, m, s) + "\n" + ':calendar_spiral: 加入日期: ' +
+            txt2.format(y, M, d, g),
+            inline=False)
+
+        embed.set_footer(text=(random.choice(jdata['加入aaa'])))
+        await channel.send(member.mention, embed=embed)
+        role = discord.utils.get(member.guild.roles, name="Player")
+        await member.add_roles(role)
+        print(f"歡迎加入{member} 已給予:{role}身分組  您加入時間: \n" + "加入時間: " +
+              txt.format(h, m, s) + "/" + txt2.format(y, M, d, g))
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        channel = self.bot.get_channel(int(jdata['Leave_channel']))
+
+        _weekday = {
+            0: '星期一',
+            1: '星期二',
+            2: '星期三',
+            3: '星期四',
+            4: '星期五',
+            5: '星期六',
+            6: '星期日'
+        }
+
+        #格林威治天文臺時間
+        t = time.gmtime(time.time())
+
+        #月份天數陣列
+        day = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        #轉成代數
+        y = t.tm_year
+        M = t.tm_mon
+        d = t.tm_mday
+        h = t.tm_hour + 8
+        m = t.tm_min
+        s = t.tm_sec
+
+        #判斷潤平年
+        if y % 400 == 0:
+            day[2] = 29
+        elif y % 100 == 0:
+            day[2] = 28
+        elif y % 4 == 0:
+            day[2] = 29
+        else:
+            day[2] = 28
+
+
+#處裡跨月跨年狀況
+        d = d + int(h / 24)
+        h = h % 24
+        tm = day[M]
+        M = M + int(d / tm)
+        d = d % tm
+        y = y + int(M / 12)
+        M = M % 12
+
+        #s 秒
+        #m 分
+        #h 時
+        #d 日
+        #M 月
+        #y 年
+
+        g = (_weekday[datetime.today().weekday()])
+        txt = "{} {}:{}"
+        txt2 = "{}年{}月{}日 {}"
+        print(f"{member} 退出伺服器 " + txt.format(h, m, s) + "/" +
+              txt2.format(y, M, d, g))
+
+        embed1 = discord.Embed(
+            title="", description="", color=(random.choice(jdata['顏色'])))
+        embed1.set_author(
+            name="OwO Bot",
+            url="https://discord.gg/nRa2994",
+            icon_url=
+            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
+        )
+        embed1.add_field(
+            name='QAQ',
+            value='\n\n'
+            f'{member.mention}退出同樂了:tired_face:....\n:clock3:退出時間: ' +
+            txt.format(h, m, s) + "\n" + ':calendar_spiral:退出日期: ' +
+            txt2.format(y, M, d, g),
+            inline=False)
+
+        embed1.set_footer(
+            text=(random.choice(jdata['加入aaa'])),
+            icon_url=
+            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
+        )
+        await channel.send(embed=embed1)
+
+    
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+
+        if msg.content.lower().startswith(
+                '蹦假崩') and msg.author != self.bot.user:
+            await msg.delete()
+            await msg.channel.send('**蹦蹦告訴本鼠他要去吃飯**')
+
+        if msg.content.lower().startswith(
+                '綠露營') and msg.author != self.bot.user:
+            await msg.delete()
+            await msg.channel.send('**伊綠告訴本鼠連假要去露營**')
+
+        if msg.content.lower().startswith(
+                '蹦豬') and msg.author != self.bot.user:
+            await msg.delete()
+            await msg.channel.send('**蹦蹦告訴本鼠他要去睡覺了！**')
+
+        if msg.content.lower().startswith(
+                '/狀態') and msg.author != self.bot.user:
+            cpufreq = psutil.cpu_freq()
+            svmem = psutil.virtual_memory()
+            uname = platform.uname()
+
+            guild = msg.guild
+            embed = discord.Embed()
+            # embed.set_thumbnail(url=guild.icon_url)
+            embed.set_author(name=guild.name, icon_url=guild.icon_url)
+            embed.add_field(name="CPU名稱", value=f"{uname.processor}", inline=True)
+            embed.add_field(name="CPU使用量", value=f"`{psutil.cpu_percent(percpu=False, interval=1)}%`", inline=True)
+
+            embed.add_field(name="電腦平台", value=f"{uname.system} {uname.release}", inline=False)
+
+            embed.add_field(name="RAM總大小", value=f"`{get_size(svmem.total)}`", inline=True)
+            embed.add_field(name="RAM剩餘大小", value=f"`{get_size(svmem.available)}`", inline=True)
+            embed.add_field(name="RAM使用大小", value=f"`{get_size(svmem.used)}`", inline=True)
+            embed.add_field(name="RAM使用量", value=f"`{svmem.percent}%`", inline=True)
+
+            embed.set_footer(text="製作by.Eric/伊綠")
+            await msg.channel.send(embed=embed)
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        if int(payload.message_id) == 713019873839546400:
+            user = payload.member
+
+            guild = discord.utils.find(
+                lambda g: g.id == int(payload.member.guild.id),
+                self.bot.guilds)
+            if payload.emoji.name == "👦":  #填入反應字串(切記一定要是長這樣的)
+                role = discord.utils.get(guild.roles, name="boy")  #填入身分組名稱
+            elif payload.emoji.name == "😰":  #填入反應字串(切記一定要是長這樣的)
+                role = discord.utils.get(guild.roles, name="中性人")
+            elif payload.emoji.name == "👧":  #填入反應字串
+                role = discord.utils.get(guild.roles, name="girl")  #填入身分組名稱
+            else:
+                pass
+
+            if role is not None:
+                member = discord.utils.find(lambda m: m.id == payload.user_id,
+                                            guild.members)
+
+                if member is not None:
+                    await member.add_roles(
+                        role,
+                        atomic=True,
+                        reason='%s已領取%s身分組' % (member, role))
+                    print("done")
+                else:
+                    print("Member not found")
+            else:
+                print("Role not found")
+
+def setup(bot):
+    bot.add_cog(Event(bot))
