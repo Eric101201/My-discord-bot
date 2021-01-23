@@ -10,7 +10,7 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.log_channel = self.bot.get_channel(802015802177093642)
+        self.log_channel = self.bot.get_channel(801804861779083275)
 
     @Cog.listener()
     async def on_user_update(self, before, after):
@@ -18,6 +18,8 @@ class Log(commands.Cog):
             embed = Embed(title="使用者名稱更改",
                           colour=after.colour,
                           timestamp=datetime.utcnow())
+
+            embed.add_field(name="更改使用者", value=f"<@{after.id}>.")
 
             fields = [("更改前", before.name, True),
                       ("更改後", after.name, True)]
@@ -35,6 +37,8 @@ class Log(commands.Cog):
             fields = [("更改前", before.discriminator, True),
                       ("更改後", after.discriminator, True)]
 
+            embed.add_field(name="更改使用者", value=f"<@{after.id}>.")
+
             for name, value, inline in fields:
                 embed.add_field(name=name, value=value, inline=inline)
 
@@ -42,9 +46,11 @@ class Log(commands.Cog):
 
         if before.avatar_url != after.avatar_url:
             embed = Embed(title="使用者頭貼更改",
-                          description="左邊新頭貼, 右邊舊頭貼.",
+                          description="上方舊頭貼, 下方新頭貼.",
                           colour=self.log_channel.guild.get_member(after.id).colour,
                           timestamp=datetime.utcnow())
+
+            embed.add_field(name="更改使用者", value=f"<@{after.id}>.")
 
             embed.set_thumbnail(url=before.avatar_url)
             embed.set_image(url=after.avatar_url)
@@ -57,6 +63,8 @@ class Log(commands.Cog):
             embed = Embed(title="使用者暱稱",
                           colour=after.colour,
                           timestamp=datetime.utcnow())
+
+            embed.add_field(name="更改使用者", value=f"更改 by <@{after.id}>.")
 
             fields = [("更改前", before.display_name, True),
                       ("更改後", after.display_name, True)]
