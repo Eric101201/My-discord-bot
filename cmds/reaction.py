@@ -56,11 +56,11 @@ class reaction(commands.Cog):
             ticket_nr = random.randint(0, 9999)
             self.channel_ticket = await category.create_text_channel(f'{member}的匿名-{ticket_nr}', overwrites=overwrites)
 
-            embed = discord.Embed(
-                title="心裡有話沒地方說嗎??",
-                description="這裡可以讓你匿名說出來喔!!.\n\n:white_check_mark: - 輸入完畢時請點選此貼圖來通知管理員處理\n:lock: - 關閉此匿名頻道 `管理員專用` \n:floppy_disk: - 儲存頻道聊天紀錄 `管理員專用` ",
-                color=0x0000ff)
+            embed = discord.Embed(title="心裡有話沒地方說嗎??",color=0x0000ff)
             embed.set_author(name="匿名機器人")
+            embed.add_field(name='匿名格式:', value='```-匿名模式 (1️⃣/2️⃣)：\n''-內容： \n''> \n''> \n''>  ```', inline=False)
+
+            embed.add_field(name='這裡可以讓你匿名說出來喔!!.', value=':white_check_mark: - 輸入完畢時請點選此貼圖來通知管理員處理\n:lock: - 關閉此匿名頻道 `管理員專用` \n:floppy_disk: - 儲存頻道聊天紀錄 `管理員專用`', inline=False)
 
             await self.channel_ticket.send(f"{member.mention}")
 
