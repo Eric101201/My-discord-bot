@@ -22,5 +22,18 @@ class googlesss(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    @commands.command(name='dcapi', help='Discord.py搜尋 <搜尋內容>')
+    async def dcapi(self, ctx, owo):
+        nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+
+        embed = discord.Embed(color=ctx.author.color)
+        embed.set_author(name='Discord.py搜尋', icon_url='https://i.imgur.com/RPrw70n.jpg')
+
+        embed.add_field(name=f'》搜尋-{owo}', value=f'[點這裡!](https://discordpy.readthedocs.io/en/latest/search.html?q={owo})',  inline=False)
+
+        embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+
+        await ctx.send(embed=embed)
+
 def setup(bot):
     bot.add_cog(googlesss(bot))

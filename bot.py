@@ -16,34 +16,24 @@ bot = commands.Bot(command_prefix=prefix, help_command=None, intents=intents, ow
 async def status_task():
     while True:
         await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=F"{prefix}help"))
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
         await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
-        await asyncio.sleep(10)
+        await asyncio.sleep(5)
+        await bot.change_presence(status=discord.Status.idle, activity=discord.Activity(type=discord.ActivityType.watching, name=f'我正在 {bot.guilds}' + "個伺服器做奴隸"))
+        await asyncio.sleep(5)
 
 @bot.event
 async def on_ready():
     channel = bot.get_channel(701779007980437826)
-    #await bot.change_presence(status=discord.Status.idle,
-    #    activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
-    #bot.loop.create_task(status_task())
-    activity = discord.Game(name="Netflix", type=3)
-    await bot.change_presence(status=discord.Status.idle, activity=activity)
+    bot.loop.create_task(status_task())
     embed2=discord.Embed(title=">>Bot on ready<<", color=(random.choice(jdata['顏色'])))
     await channel.send(embed=embed2)
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
     print(f'prefix:{prefix}')
+    print(str(len(bot.guilds)) + " servers")
     print('========OwO========')
-
-#    while 1:
-#
-#        channel1 = bot.get_channel(724285918092984370)
-#        embed4=discord.Embed(title=">>定時傳送訊息.w.(防止機器人下線)<<", color=(random.choice(jdata['顏色'])))
-#        await channel1.send(embed=embed4)
-#        print(">>定時傳送訊息.w.(防止機器人下線)")
-#
-#        await asyncio.sleep(3600)
 
 for filename in os.listdir('./cmds'):
     if filename.endswith('.py'):
