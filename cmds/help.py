@@ -19,11 +19,14 @@ class help(commands.Cog):
                               f'`{prefix}info`  機器人狀態 \n'
                               f'`{prefix}ping`  機器人延遲 \n'
                               f'`{prefix}google`  Google搜尋 <搜尋內容> \n'
+                              f'`{prefix}dcapi`  Discord.py搜尋 <搜尋內容> \n'
+                              f'`{prefix}level`  查詢等級 \n'
                               f'`{prefix}開啟`  開啟頻道 <頻道名稱> \n',
                         inline=False)
 
         embed.add_field(name='》管理員以及開發者使用',
                         value=f'`{prefix}vote`  投票功能, <主題> <選項1> <選項2> \n'
+                              f'`{prefix}addexp` 增加經驗值 <數字> <tag user> \n'
                               f'`{prefix}clean`  刪除文字 <刪除數量> \n'
                               f'`{prefix}say`  讓機器人說話 <內容> \n'
                               f'`{prefix}say2`  讓機器人說話 <頻道ID> <內容> \n'

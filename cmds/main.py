@@ -90,7 +90,7 @@ class Main(commands.Cog):
         else:
             await ctx.send(f"您已將 {user.mention} 解鎖.")
 
-    @commands.command()
+    @commands.command(name='level', help='查詢等級')
     async def level(self, ctx, member: discord.Member = None):
         if not member:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
@@ -119,7 +119,8 @@ class Main(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.has_guild_permissions(administrator=True)
+    @commands.command(name='addexp', help='新增經驗值 <數字> <tag user>')
     async def addexp(self, ctx, owo, member: discord.Member = None):
         if not member:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
