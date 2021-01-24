@@ -1,9 +1,15 @@
 import discord
-from discord.ext import commands
 import json
+
+from discord.ext import commands
+from datetime import datetime
+from cmds.event import add_experience
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
+
+with open('users.json', 'r') as f:
+    users = json.load(f)
 
 class Main(commands.Cog):
     def __init__(self, bot):
@@ -83,6 +89,59 @@ class Main(commands.Cog):
             await ctx.send(f"您已將 {user.mention} 解鎖.")
         else:
             await ctx.send(f"您已將 {user.mention} 解鎖.")
+
+    @commands.command()
+    async def level(self, ctx, member: discord.Member = None):
+        if not member:
+            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+            id = ctx.message.author.id
+            lvl = users[str(id)]['level']
+            exp = users[str(id)]['experience']
+
+            embed = discord.Embed(title='等級系統', color=ctx.author.color)
+            embed.set_thumbnail(url=ctx.author.avatar_url)
+            embed.add_field(name='目前你的等級', value=f'{lvl}', inline=False)
+            embed.add_field(name='目前你的經驗值', value=f'{exp}', inline=False)
+            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+
+            await ctx.send(embed=embed)
+        else:
+            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+            id = member.id
+            lvl = users[str(id)]['level']
+            exp = users[str(id)]['experience']
+
+            embed = discord.Embed(title='等級系統', color=ctx.author.color)
+            embed.set_thumbnail(url=member.avatar_url)
+            embed.add_field(name=f'目前 "{member}" 的等級', value=f'{lvl}', inline=False)
+            embed.add_field(name=f'目前 "{member}" 的經驗值', value=f'{exp}', inline=False)
+            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+
+            await ctx.send(embed=embed)
+
+    @commands.command()
+    async def addexp(self, ctx, owo, member: discord.Member = None):
+        if not member:
+            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+
+            await add_experience(users, ctx.author, owo)
+
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+            embed = discord.Embed(title='增加經驗值', description=f'給予 {(ctx.author)} 使用者 {owo} 經驗值', color=discord.Color.orange())
+            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+            await ctx.send(embed=embed)
+        else:
+            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+
+            await add_experience(users, member, str(owo))
+
+            with open('users.json', 'w') as f:
+                json.dump(users, f)
+
+            embed = discord.Embed(title='增加經驗值', description=f'給予 {member} 使用者 {owo} 經驗值', color=discord.Color.orange())
+            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+            await ctx.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(Main(bot))
