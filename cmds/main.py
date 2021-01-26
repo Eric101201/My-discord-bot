@@ -8,9 +8,6 @@ from cmds.event import add_experience
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
 
-with open('users.json', 'r') as f:
-    users = json.load(f)
-
 class Main(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -95,6 +92,10 @@ class Main(commands.Cog):
         if not member:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
             id = ctx.message.author.id
+
+            with open('users.json', 'r') as f:
+                users = json.load(f)
+
             lvl = users[str(id)]['level']
             exp = users[str(id)]['experience']
 
@@ -108,6 +109,10 @@ class Main(commands.Cog):
         else:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
             id = member.id
+
+            with open('users.json', 'r') as f:
+                users = json.load(f)
+
             lvl = users[str(id)]['level']
             exp = users[str(id)]['experience']
 
@@ -125,15 +130,23 @@ class Main(commands.Cog):
         if not member:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
 
+            with open('users.json', 'r') as f:
+                users = json.load(f)
+
             await add_experience(users, ctx.author, owo)
 
             with open('users.json', 'w') as f:
                 json.dump(users, f)
+
             embed = discord.Embed(title='增加經驗值', description=f'給予 {(ctx.author)} 使用者 {owo} 經驗值', color=discord.Color.orange())
             embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
             await ctx.send(embed=embed)
+            return
         else:
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+
+            with open('users.json', 'r') as f:
+                users = json.load(f)
 
             await add_experience(users, member, str(owo))
 
@@ -143,6 +156,7 @@ class Main(commands.Cog):
             embed = discord.Embed(title='增加經驗值', description=f'給予 {member} 使用者 {owo} 經驗值', color=discord.Color.orange())
             embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
             await ctx.send(embed=embed)
+            return
 
 def setup(bot):
     bot.add_cog(Main(bot))
