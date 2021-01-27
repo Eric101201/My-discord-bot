@@ -108,7 +108,13 @@ class giveaway(commands.Cog):
 
         wimmer = random.choice(users)
 
-        await ctx.send(f'恭喜中獎者!! {wimmer.mention} 贏得 `{prize}` !!')
+        embed2 = discord.Embed(title='恭喜中獎者', color=discord.Colour.red())
+        embed2.add_field(name=f'中獎者', value=f'{wimmer.mention}', inline=True)
+        embed2.add_field(name='獎品:', value=f'`{prize}`', inline=True)
+        embed2.add_field(name='訊息連結', value=f'[點此傳送!!]({my_msg.jump_url})', inline=False)
+
+        await ctx.send(f'{wimmer.mention}')
+        await ctx.send(embed=embed2)
 
 def setup(bot):
     bot.add_cog(giveaway(bot))
