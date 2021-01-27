@@ -29,6 +29,7 @@ class giveaway(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.has_guild_permissions(administrator=True)
     @commands.command(name='gstart', help='抽獎系統 <抽獎倒數時間> <抽獎內容>')
     async def gstart(self, ctx, mins, *, prize:str):
 
