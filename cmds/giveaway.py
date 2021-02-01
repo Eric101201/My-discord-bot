@@ -86,13 +86,11 @@ class giveaway(commands.Cog):
         g = (_weekday[datetime.today().weekday()])
         txt = "{} {}:{}"
         txt2 = "{}/{}/{} {}"
-
-        embed = discord.Embed(title='抽獎系統!', description=f'{prize}', color=discord.Colour.orange())
-
         time2 = convert(mins)
 
-        embed.add_field(name='開始時間:', value=txt2.format(y, M, d, g) + '-' + txt.format(h, m, s) )
-
+        embed = discord.Embed(title='抽獎系統!', color=discord.Colour.orange())
+        embed.add_field(name='抽獎獎品:', value=f'`{prize}`', inline=False)
+        embed.add_field(name='開始時間:', value=txt2.format(y, M, d, g) + '-' + txt.format(h, m, s), inline=False)
         embed.set_footer(text=f'結束於 {mins} 後')
 
         my_msg = await ctx.send(embed=embed)
@@ -109,9 +107,9 @@ class giveaway(commands.Cog):
         wimmer = random.choice(users)
 
         embed2 = discord.Embed(title='恭喜中獎者', color=discord.Colour.red())
-        embed2.add_field(name=f'中獎者', value=f'{wimmer.mention}', inline=True)
-        embed2.add_field(name='獎品:', value=f'`{prize}`', inline=True)
-        embed2.add_field(name='訊息連結', value=f'[點此傳送!!]({my_msg.jump_url})', inline=False)
+        embed2.add_field(name=f'中獎者:', value=f'{wimmer.mention}', inline=True)
+        embed2.add_field(name='抽獎獎品:', value=f'`{prize}`', inline=True)
+        embed2.add_field(name='訊息連結:', value=f'[點此傳送!!]({my_msg.jump_url})', inline=False)
 
         await ctx.send(f'{wimmer.mention}')
         await ctx.send(embed=embed2)
