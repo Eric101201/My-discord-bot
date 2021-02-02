@@ -29,7 +29,7 @@ class help2(commands.Cog):
                         # get group commands help
                         # command help is empty
                         if groupCommand[helpCommand[i]].help == None:
-                            helptext.append("這主人很懶，沒有留下任何訊息!")
+                            helptext.append("owo!")
                         else:
                             helptext.append(groupCommand[helpCommand[i]].help)
                     break
@@ -38,7 +38,7 @@ class help2(commands.Cog):
                 helpCommand.append(command.name)
                 # command help is empty
                 if command.help == None:
-                    helptext.append("這主人很懶，沒有留下任何訊息!")
+                    helptext.append("owo!")
                 else:
                     helptext.append(command.help)
         # embed
