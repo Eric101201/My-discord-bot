@@ -1,10 +1,11 @@
 import discord
-from discord.ext import commands
 import json
 import os
-from datetime import datetime
 import asyncio
 import requests
+
+from datetime import datetime
+from discord.ext import commands
 from bs4 import BeautifulSoup
 
 intents = discord.Intents.all()
@@ -21,37 +22,18 @@ bot = commands.Bot(command_prefix=prefix, help_command=None, intents=intents, ow
 
 async def status_task():
     while True:
-        await bot.change_presence(status=discord.Status.idle,
-                                  activity=discord.Activity(type=discord.ActivityType.watching, name=F"{prefix}help"))
+        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name=F"{prefix}help"))
         await asyncio.sleep(5)
-        await bot.change_presence(status=discord.Status.idle,
-                                  activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
+        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
         await asyncio.sleep(5)
-        await bot.change_presence(status=discord.Status.idle,
-                                  activity=discord.Activity(type=discord.ActivityType.watching,
-                                                            name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
+        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
         await asyncio.sleep(5)
 
-
-@bot.event
-async def on_ready():
-    # channel = bot.get_channel(701779007980437826)
-    bot.loop.create_task(status_task())
-    # embed2=discord.Embed(title=">>Bot on ready<<", color=(random.choice(jdata['顏色'])))
-    # await channel.send(embed=embed2)
-    print(">> Bot is online <<")
-    print(bot.user.name)
-    print(bot.user.id)
-    print(f'prefix:{prefix}')
-    print(str(len(bot.guilds)) + " servers")
-    print('========OwO========')
-
-    # ------------------------------------------------------------------------------------------------------------------
-
+async def OAO():
     while True:
-        inp = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80'
-        inpp = requests.get(inp)
-        sss = BeautifulSoup(inpp.content, 'html.parser')
+        #inp = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80'
+        inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
+        sss = BeautifulSoup(inp.content, 'html.parser')
         eeee = json.loads(sss.text)
         earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
 
@@ -59,13 +41,13 @@ async def on_ready():
             jdata2 = json.load(jfile)
 
         if str(earthquakeNo) not in jdata2:
-            inp = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80'
+            #inp = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80'
 
-            inpp = requests.get(inp)
+            #inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
 
-            sss = BeautifulSoup(inpp.content, 'html.parser')
+            #sss = BeautifulSoup(inp.content, 'html.parser')
 
-            eeee = json.loads(sss.text)
+            #eeee = json.loads(sss.text)
 
             helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
             earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
@@ -100,6 +82,24 @@ async def on_ready():
 
             with open('data.json', 'w') as f:
                 json.dump(f'{earthquakeNo}', f)
+        await asyncio.sleep(2)
+
+@bot.event
+async def on_ready():
+    # channel = bot.get_channel(701779007980437826)
+    bot.loop.create_task(status_task())
+    bot.loop.create_task(OAO())
+    # embed2=discord.Embed(title=">>Bot on ready<<", color=(random.choice(jdata['顏色'])))
+    # await channel.send(embed=embed2)
+    print(">> Bot is online <<")
+    print(bot.user.name)
+    print(bot.user.id)
+    print(f'prefix:{prefix}')
+    print(str(len(bot.guilds)) + " servers")
+    print('========OwO========')
+
+    # ------------------------------------------------------------------------------------------------------------------
+
 
 
 for filename in os.listdir('./cmds'):
