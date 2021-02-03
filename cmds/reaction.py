@@ -21,6 +21,11 @@ class reaction(commands.Cog):
 
     yamlhook("channel.yaml").Operate('ID', ydata['ID'])
 
+    if (ydata == None or type(ydata['USER']) is not list):
+        ydata['USER'] = []
+
+    yamlhook("channel.yaml").Operate('USER', ydata['USER'])
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         MESSAGE_ID = 800279346799444008
@@ -28,6 +33,7 @@ class reaction(commands.Cog):
         BOT_ID = 593746376404500490
         LOG_CHANNEL_ID = 800042340600643644
         ROLE_ID = 701784905755000874
+        CHANNEL_ID = 800279155341918209
 
         guild_id = payload.guild_id
         guild = self.bot.get_guild(guild_id)
@@ -45,36 +51,53 @@ class reaction(commands.Cog):
             message = await channel.fetch_message(message_id)
             await message.remove_reaction("📩", user)
 
-            member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-            support_role = guild.get_role(ROLE_ID)
-            category = guild.get_channel(CATEGORY_ID)
-            overwrites = {
-                guild.default_role: discord.PermissionOverwrite(read_messages=False),
-                member: discord.PermissionOverwrite(read_messages=True, send_messages=True),
-                support_role: discord.PermissionOverwrite(read_messages=True, send_messages=True)
-            }
-            ticket_nr = random.randint(0, 9999)
-            self.channel_ticket = await category.create_text_channel(f'{member}的匿名-{ticket_nr}', overwrites=overwrites)
+            ydata = yamlhook("channel.yaml").load()
+            if payload.user_id not in ydata['USER']:
+                member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+                support_role = guild.get_role(ROLE_ID)
+                category = guild.get_channel(CATEGORY_ID)
+                overwrites = {
+                    guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                    member: discord.PermissionOverwrite(read_messages=True, send_messages=True),
+                    support_role: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+                }
+                ticket_nr = random.randint(0, 9999)
+                self.channel_ticket = await category.create_text_channel(f'{member}的匿名-{ticket_nr}', overwrites=overwrites)
 
-            embed = discord.Embed(title="心裡有話沒地方說嗎??",color=0x0000ff)
-            embed.set_author(name="匿名機器人")
-            embed.add_field(name='匿名格式:', value='```-匿名模式 (1️⃣/2️⃣)：\n''-內容： \n''> \n''> \n''>  ```', inline=False)
+                embed = discord.Embed(title="心裡有話沒地方說嗎??",color=0x0000ff)
+                embed.set_author(name="匿名機器人")
+                embed.add_field(name='匿名格式:', value='```-匿名模式 (1️⃣/2️⃣)：\n''-內容： \n''> \n''> \n''>  ```', inline=False)
 
-            embed.add_field(name='這裡可以讓你匿名說出來喔!!.', value=':white_check_mark: - 輸入完畢時請點選此貼圖來通知管理員處理\n:lock: - 關閉此匿名頻道 `管理員專用` \n:floppy_disk: - 儲存頻道聊天紀錄 `管理員專用`', inline=False)
+                embed.add_field(name='這裡可以讓你匿名說出來喔!!.', value=':white_check_mark: - 輸入完畢時請點選此貼圖來通知管理員處理\n:lock: - 關閉此匿名頻道 `管理員專用` \n:floppy_disk: - 儲存頻道聊天紀錄 `管理員專用`', inline=False)
 
-            await self.channel_ticket.send(f"{member.mention}")
+                await self.channel_ticket.send(f"{member.mention}")
 
-            msg = await self.channel_ticket.send(embed=embed)
+                msg = await self.channel_ticket.send(embed=embed)
 
-            await msg.add_reaction("✅")
-            await msg.add_reaction("🔒")
-            await msg.add_reaction("💾")
-            try:
-                ydata = yamlhook("channel.yaml").load()
-                ydata['ID'].append(msg.id)
-                yamlhook("channel.yaml").Operate('ID', ydata['ID'])
-            except ValueError:
-                print("not add or return")
+                await msg.add_reaction("✅")
+                await asyncio.sleep(0.3)
+                await msg.add_reaction("🔒")
+                await asyncio.sleep(0.3)
+                await msg.add_reaction("💾")
+                try:
+                    ydata = yamlhook("channel.yaml").load()
+                    ydata['ID'].append(msg.id)
+                    yamlhook("channel.yaml").Operate('ID', ydata['ID'])
+                except ValueError:
+                    print("not add or return1")
+
+                try:
+                    ydata = yamlhook("channel.yaml").load()
+                    ydata['USER'].append(payload.user_id)
+                    yamlhook("channel.yaml").Operate('USER', ydata['USER'])
+                except ValueError:
+                    print("not add or return2")
+            else:
+                member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
+                channel1 = self.bot.get_channel(CHANNEL_ID)
+                OAO = await channel1.send(f'{member.mention}您已開啟匿名頻道,請勿重複開啟')
+                await asyncio.sleep(5)
+                await OAO.delete()
 
         ydata = yamlhook("channel.yaml").load()
         if payload.message_id in ydata['ID']:
@@ -136,16 +159,21 @@ class reaction(commands.Cog):
 
                     await channel.send(embed=embed)
 
-                    #ydata = yamlhook("channel.yaml").load()
-                    # open blacklist
-                    #try:
-                    #    ydata['ID'].remove(msg.id)
-                    #    # blacklist remove content
-                    #    yamlhook("channel.yaml").Operate('ID', ydata['ID'])
-                    #except ValueError:
-                    #    print("no id")
+                    try:
+                        ydata = yamlhook("channel.yaml").load()
+                        ydata['ID'].remove(payload.message_id)
+                        yamlhook("channel.yaml").Operate('ID', ydata['ID'])
+                    except ValueError:
+                        print("no id")
 
-                    await asyncio.sleep(5)
+                    try:
+                        ydata = yamlhook("channel.yaml").load()
+                        ydata['USER'].remove(payload.user_id)
+                        yamlhook("channel.yaml").Operate('USER', ydata['USER'])
+                    except ValueError:
+                        print("not add or return2")
+
+                    await asyncio.sleep(3)
                     await channel.delete()
 
 def setup(bot):
