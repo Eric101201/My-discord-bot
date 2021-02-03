@@ -6,6 +6,13 @@ from discord.ext import commands
 
 prefix = 'w+'
 
+def get_size(bytes, suffix="B"):
+    factor = 1024
+    for unit in ["", "K", "M", "G", "T", "P"]:
+        if bytes < factor:
+            return f"{bytes:.2f}{unit}{suffix}"
+        bytes /= factor
+
 class ping(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -17,11 +24,10 @@ class ping(commands.Cog):
         t2 = time.perf_counter()
         await ctx.trigger_typing()
         nowtime = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        svmem = psutil.virtual_memory()
 
         embed=discord.Embed(title="延遲(PING)", color=ctx.author.colour)
-        process = psutil.Process(os.getpid()).memory_info().rss # get app used ram
-        percent = psutil.virtual_memory().percent # get used ram percent
-        embed.add_field(name="Used Ram", value=f"```{round(process/1000000)} MB ({percent}%)```", inline=False)
+        embed.add_field(name="Used Ram", value=f"```{get_size(svmem.used)} ({svmem.percent}%)```", inline=False)
         embed.add_field(name="Bot Ping", value=f"```{round(self.bot.latency*1000)} ms```", inline=True)
         embed.add_field(name="Sys Ping", value=f"```{round((t2-t1)*1000)} ms```", inline=True)
         embed.set_footer(text=f"👾{nowtime}")
