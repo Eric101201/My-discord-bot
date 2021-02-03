@@ -13,6 +13,8 @@ class Main(commands.Cog):
         self.bot = bot
 
     @commands.command(name='開啟',help='開啟頻道 <頻道名稱>')
+    @commands.has_guild_permissions(administrator=True)
+    @commands.has_any_role('owo', 'Bot')
     @commands.guild_only()
     @commands.bot_has_guild_permissions(manage_channels=True)
     async def 開啟(self, ctx, *, name):
@@ -29,7 +31,7 @@ class Main(commands.Cog):
 
     @commands.command(name='關閉',help='關閉頻道 **務必在想關閉的頻道內**')
     @commands.has_guild_permissions(administrator=True)
-    #@commands.has_any_role('owo', 'Bot')
+    @commands.has_any_role('owo', 'Bot')
     @commands.guild_only()
     @commands.has_guild_permissions(manage_channels=True)
     @commands.bot_has_guild_permissions(manage_channels=True)
