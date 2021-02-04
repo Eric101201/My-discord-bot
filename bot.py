@@ -31,7 +31,7 @@ async def OAO():
     while True:
         #地震
         inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
-        sss = BeautifulSoup(inp.content, 'html.parser')
+        sss = BeautifulSoup(inp.content)
         eeee = json.loads(sss.text)
         originTime = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
 
@@ -76,7 +76,7 @@ async def OAO():
 
         #小規模
         inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
-        sss = BeautifulSoup(inp.content, 'html.parser')
+        sss = BeautifulSoup(inp.content)
         eeee = json.loads(sss.text)
         originTime2 = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
 
