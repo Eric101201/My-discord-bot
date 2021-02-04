@@ -20,8 +20,7 @@ class About(commands.Cog):
         self.bot = bot
 
     @commands.command(name='info', help='機器人狀態')
-    async def info(self, ctx): 
-        cpufreq = psutil.cpu_freq()
+    async def info(self, ctx):
         svmem = psutil.virtual_memory()
         uname = platform.uname()
     

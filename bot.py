@@ -29,15 +29,16 @@ async def status_task():
 
 async def OAO():
     while True:
+        #地震
         inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
         sss = BeautifulSoup(inp.content, 'html.parser')
         eeee = json.loads(sss.text)
         originTime = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
 
-        with open('data.json', 'r', encoding='utf8') as jfile2:
-            jdata2 = json.load(jfile2)
+        with open('data.json', 'r', encoding='utf8') as file2:
+            jdata2 = json.load(file2)
 
-        if originTime not in jdata2:
+        if originTime not in jdata2["Time1"]:
             helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
             earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
             location = eeee['records']['earthquake'][0]["earthquakeInfo"]["epiCenter"]["location"]  # 發生地點
@@ -48,7 +49,7 @@ async def OAO():
             unit = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["unit"]  # 深度單位
             urlicon = eeee['records']['earthquake'][0]["reportImageURI"]  # 地震報告圖片
 
-            channel = bot.get_channel(805723284113064008)
+            channel = bot.get_channel(701779007980437826)
 
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
 
@@ -69,8 +70,9 @@ async def OAO():
 
             await channel.send(embed=embed)
 
-            with open('data.json', 'w') as f2:
-                json.dump(originTime, f2)
+            jdata2["Time1"] = originTime
+            with open('data.json', 'w') as file2:
+                json.dump(jdata2, file2)
         await asyncio.sleep(2)
 
         #小規模
@@ -79,10 +81,10 @@ async def OAO():
         eeee = json.loads(sss.text)
         originTime2 = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
 
-        with open('data2.json', 'r', encoding='utf8') as jfile3:
-            jdata3 = json.load(jfile3)
+        with open('data.json', 'r', encoding='utf8') as file3:
+            jdata3 = json.load(file3)
 
-        if originTime2 not in jdata3:
+        if originTime2 not in jdata3["Time2"]:
             helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
             earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
             location = eeee['records']['earthquake'][0]["earthquakeInfo"]["epiCenter"]["location"]  # 發生地點
@@ -93,7 +95,7 @@ async def OAO():
             unit = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["unit"]  # 深度單位
             urlicon = eeee['records']['earthquake'][0]["reportImageURI"]  # 地震報告圖片
 
-            channel = bot.get_channel(805723284113064008)
+            channel = bot.get_channel(701779007980437826)
 
             nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
 
@@ -111,21 +113,21 @@ async def OAO():
 
             embed.set_footer(text=f'地震報告提供• {nowtime} ',
                              icon_url='https://images-ext-2.discordapp.net/external/OLPz8IZNv22U8L3ImuVy24c3nemqogFY7L1v9Y98z7s/https/media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
-
             await channel.send(embed=embed)
-
-            with open('data2.json', 'w') as f3:
-                json.dump(originTime2, f3)
+            jdata3["Time2"] = originTime2
+            with open('data.json', 'w') as file3:
+                json.dump(jdata3, file3)
         await asyncio.sleep(2)
 
-        with open('data3.json', 'r', encoding='utf8') as jfile2:
-            jdata2 = json.load(jfile2)
-
+        #肺炎
         rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
         rss = feedparser.parse(rss_url)
         link = rss.entries[0]['link']
-        channel3 = bot.get_channel(806809282125234206)
-        if link not in jdata2:
+        channel3 = bot.get_channel(701779007980437826)
+        with open('data.json', 'r', encoding='utf8') as file4:
+            jdata4 = json.load(file4)
+
+        if link not in jdata4["link"]:
             rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
             rss = feedparser.parse(rss_url)
             oaoa = rss['entries'][0]['title']
@@ -145,8 +147,9 @@ async def OAO():
                              icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
 
             await channel3.send(embed=embed)
-            with open('data3.json', 'w') as f2:
-                json.dump(link, f2)
+            jdata4["link"] = link
+            with open('data.json', 'w') as file4:
+                json.dump(jdata4, file4)
         await asyncio.sleep(2)
 
 @bot.event
