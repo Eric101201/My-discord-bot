@@ -4,11 +4,11 @@ import os
 import asyncio
 import requests
 import feedparser
-import re
 
-from datetime import datetime
 from discord.ext import commands
-from bs4 import BeautifulSoup
+from sos import bigsos
+from sos import smsos
+from sos import NEWMOHW
 
 intents = discord.Intents.all()
 
@@ -27,135 +27,53 @@ async def status_task():
         await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
         await asyncio.sleep(5)
 
-async def OAO():
-    while True:
-        #地震
-        inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
-        sss = BeautifulSoup(inp.content)
-        eeee = json.loads(sss.text)
-        originTime = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
+async def sosup():
+    with open('time.json', mode='r', encoding='UTF8') as jfile:
+        svset = json.load(jfile)
+    tokenAPI = jdata["APITOKEN"]
+    API = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization={tokenAPI}"  # 大型地震
+    API2 = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={tokenAPI}"  # 小型地震
+    MOHW = f"https://www.mohw.gov.tw/rss-16-1.html"  # 衛福部
 
-        with open('data.json', 'r', encoding='utf8') as file2:
-            jdata2 = json.load(file2)
+    eew = (requests.get(API)).json()
+    eew2 = (requests.get(API2)).json()
+    cov = feedparser.parse(MOHW)
 
-        if originTime not in jdata2["Time1"]:
-            helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
-            earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
-            location = eeee['records']['earthquake'][0]["earthquakeInfo"]["epiCenter"]["location"]  # 發生地點
-            originTime = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
-            magnitdueType = eeee['records']['earthquake'][0]["earthquakeInfo"]["magnitude"]["magnitdueType"]  # 規模單位
-            magnitudeValue = eeee['records']['earthquake'][0]["earthquakeInfo"]["magnitude"]["magnitudeValue"]  # 規模單位
-            value = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["value"]  # 地震深度
-            unit = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["unit"]  # 深度單位
-            urlicon = eeee['records']['earthquake'][0]["reportImageURI"]  # 地震報告圖片
+    originTime = eew['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 大型地震發生時間
+    originTime2 = eew2["records"]["earthquake"][0]["earthquakeInfo"]["originTime"]  # 小型地震發生時間
+    covtime = cov["entries"][0]["published"]
 
-            channel = bot.get_channel(701779007980437826)
-
-            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
-
-            embed = discord.Embed(title='地震報告', color=discord.Colour.red())
-            embed.set_author(name='台灣地震報告系統',
-                             icon_url='https://images-ext-2.discordapp.net/external/MGVCq5ZDjXyZaG2UE0ysew_6fI_Rhbi4ayrVCFROmS4/https/media.discordapp.net/attachments/345147297539162115/732527807435112478/EEW.png')
-
-            embed.add_field(name=f'報告連結', value=f'[中央氣象局]({helpawa})', inline=True)
-            embed.add_field(name='編號', value=earthquakeNo, inline=True)
-            embed.add_field(name='震央位置', value=location, inline=True)
-            embed.add_field(name='發生時間', value=originTime, inline=True)
-            embed.add_field(name=magnitdueType, value=magnitudeValue, inline=True)
-            embed.add_field(name='深度', value=f'{value}{unit}', inline=True)
-            embed.set_image(url=urlicon)
-
-            embed.set_footer(text=f'地震報告提供• {nowtime} ',
-                             icon_url='https://images-ext-2.discordapp.net/external/OLPz8IZNv22U8L3ImuVy24c3nemqogFY7L1v9Y98z7s/https/media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
-
-            await channel.send(embed=embed)
-            jdata2["Time1"] = originTime
-            with open('data.json', 'w') as file2:
-                json.dump(jdata2, file2)
-        await asyncio.sleep(2)
-
-        #小規模
-        inp = requests.get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80')
-        sss = BeautifulSoup(inp.content)
-        eeee = json.loads(sss.text)
-        originTime2 = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
-
-        with open('data.json', 'r', encoding='utf8') as file2:
-            jdata2 = json.load(file2)
-
-        if originTime2 not in jdata2["Time2"]:
-            helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
-            earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
-            location = eeee['records']['earthquake'][0]["earthquakeInfo"]["epiCenter"]["location"]  # 發生地點
-            originTime2 = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
-            magnitdueType = eeee['records']['earthquake'][0]["earthquakeInfo"]["magnitude"]["magnitdueType"]  # 規模單位
-            magnitudeValue = eeee['records']['earthquake'][0]["earthquakeInfo"]["magnitude"]["magnitudeValue"]  # 規模單位
-            value = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["value"]  # 地震深度
-            unit = eeee['records']['earthquake'][0]["earthquakeInfo"]["depth"]["unit"]  # 深度單位
-            urlicon = eeee['records']['earthquake'][0]["reportImageURI"]  # 地震報告圖片
-
-            channel = bot.get_channel(701779007980437826)
-
-            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
-
-            embed = discord.Embed(title='地震報告', color=discord.Colour.red())
-            embed.set_author(name='台灣地震報告系統',
-                             icon_url='https://images-ext-2.discordapp.net/external/MGVCq5ZDjXyZaG2UE0ysew_6fI_Rhbi4ayrVCFROmS4/https/media.discordapp.net/attachments/345147297539162115/732527807435112478/EEW.png')
-
-            embed.add_field(name=f'報告連結', value=f'[中央氣象局]({helpawa})', inline=True)
-            embed.add_field(name='編號', value='小規模地震無編號', inline=True)
-            embed.add_field(name='震央位置', value=location, inline=True)
-            embed.add_field(name='發生時間', value=originTime2, inline=True)
-            embed.add_field(name=magnitdueType, value=magnitudeValue, inline=True)
-            embed.add_field(name='深度', value=f'{value}{unit}', inline=True)
-            embed.set_image(url=urlicon)
-
-            embed.set_footer(text=f'地震報告提供• {nowtime} ',
-                             icon_url='https://images-ext-2.discordapp.net/external/OLPz8IZNv22U8L3ImuVy24c3nemqogFY7L1v9Y98z7s/https/media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
-            await channel.send(embed=embed)
-            jdata2["Time2"] = originTime2
-            with open('data.json', 'w') as file2:
-                json.dump(jdata2, file2)
-        await asyncio.sleep(2)
-
-        #肺炎
-        rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
-        rss = feedparser.parse(rss_url)
-        link = rss.entries[0]['link']
-        channel3 = bot.get_channel(701779007980437826)
-
-        with open('data.json', 'r', encoding='utf8') as file2:
-            jdata2 = json.load(file2)
-
-        if link not in jdata2["link"]:
-            rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
-            rss = feedparser.parse(rss_url)
-            oaoa = rss['entries'][0]['title']
-            owow = rss.entries[0]['summary']
-            link = rss.entries[0]['link']
-
-            text = re.sub("<.*?>", "", owow)
-
-            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
-
-            embed = discord.Embed(title=f'{oaoa}', color=discord.Colour.blue())
-            embed.set_author(name='衛生福利部公告',
-                             icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
-            embed.add_field(name='新聞連結', value=f'[點擊此處]({link})', inline=False)
-            embed.add_field(name='內容', value=f'{text}', inline=False)
-            embed.set_footer(text=f'衛生福利部RSS服務提供• {nowtime} ',
-                             icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
-
-            await channel3.send(embed=embed)
-            jdata2["link"] = link
-            with open('data.json', 'w') as file2:
-                json.dump(jdata2, file2)
-        await asyncio.sleep(2)
+    site = []
+    site = ["bigsos"] + ["smsos"] + ["NEWMOHW"]
+    print(site)
+    for i in range(len(site)):
+        if site[i] not in svset:
+            svset[site[i]] = ""
+            print("建立網址紀錄")
+    for i in range(len(site)):
+        if site[i] == "bigsos":
+            if originTime != svset[site[i]]:
+                channel = bot.get_channel(805723284113064008)
+                svset[site[i]] = originTime
+                await bigsos(channel, API)
+        if site[i] == "smsos":
+            if originTime2 != svset[site[i]]:
+                channel = bot.get_channel(805723284113064008)
+                svset[site[i]] = originTime2
+                await smsos(channel, API2)
+        if site[i] == "NEWMOHW":
+            if covtime != svset[site[i]]:
+                channel = bot.get_channel(806809282125234206)
+                svset[site[i]] = covtime
+                await NEWMOHW(channel, MOHW)
+    with open('time.json', 'w') as outfile:
+        json.dump(svset, outfile, ensure_ascii=False, indent=4)
+    await asyncio.sleep(10)
 
 @bot.event
 async def on_ready():
     bot.loop.create_task(status_task())
-    bot.loop.create_task(OAO())
+    bot.loop.create_task(sosup())
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
