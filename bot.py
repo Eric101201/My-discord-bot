@@ -69,7 +69,6 @@ async def OAO():
                              icon_url='https://images-ext-2.discordapp.net/external/OLPz8IZNv22U8L3ImuVy24c3nemqogFY7L1v9Y98z7s/https/media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
 
             await channel.send(embed=embed)
-
             jdata2["Time1"] = originTime
             with open('data.json', 'w') as file2:
                 json.dump(jdata2, file2)
@@ -81,10 +80,10 @@ async def OAO():
         eeee = json.loads(sss.text)
         originTime2 = eeee['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 發生時間
 
-        with open('data.json', 'r', encoding='utf8') as file3:
-            jdata3 = json.load(file3)
+        with open('data.json', 'r', encoding='utf8') as file2:
+            jdata2 = json.load(file2)
 
-        if originTime2 not in jdata3["Time2"]:
+        if originTime2 not in jdata2["Time2"]:
             helpawa = eeee['records']['earthquake'][0]['web']  # 資料連結
             earthquakeNo = eeee['records']['earthquake'][0]["earthquakeNo"]  # 幾號地震
             location = eeee['records']['earthquake'][0]["earthquakeInfo"]["epiCenter"]["location"]  # 發生地點
@@ -114,9 +113,9 @@ async def OAO():
             embed.set_footer(text=f'地震報告提供• {nowtime} ',
                              icon_url='https://images-ext-2.discordapp.net/external/OLPz8IZNv22U8L3ImuVy24c3nemqogFY7L1v9Y98z7s/https/media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
             await channel.send(embed=embed)
-            jdata3["Time2"] = originTime2
-            with open('data.json', 'w') as file3:
-                json.dump(jdata3, file3)
+            jdata2["Time2"] = originTime2
+            with open('data.json', 'w') as file2:
+                json.dump(jdata2, file2)
         await asyncio.sleep(2)
 
         #肺炎
@@ -124,10 +123,11 @@ async def OAO():
         rss = feedparser.parse(rss_url)
         link = rss.entries[0]['link']
         channel3 = bot.get_channel(701779007980437826)
-        with open('data.json', 'r', encoding='utf8') as file4:
-            jdata4 = json.load(file4)
 
-        if link not in jdata4["link"]:
+        with open('data.json', 'r', encoding='utf8') as file2:
+            jdata2 = json.load(file2)
+
+        if link not in jdata2["link"]:
             rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
             rss = feedparser.parse(rss_url)
             oaoa = rss['entries'][0]['title']
@@ -147,25 +147,21 @@ async def OAO():
                              icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
 
             await channel3.send(embed=embed)
-            jdata4["link"] = link
-            with open('data.json', 'w') as file4:
-                json.dump(jdata4, file4)
+            jdata2["link"] = link
+            with open('data.json', 'w') as file2:
+                json.dump(jdata2, file2)
         await asyncio.sleep(2)
 
 @bot.event
 async def on_ready():
-    # channel = bot.get_channel(701779007980437826)
     bot.loop.create_task(status_task())
     bot.loop.create_task(OAO())
-    # embed2=discord.Embed(title=">>Bot on ready<<", color=(random.choice(jdata['顏色'])))
-    # await channel.send(embed=embed2)
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
     print(f'prefix:{prefix}')
     print(str(len(bot.guilds)) + " servers")
     print('========OwO========')
-
     # ------------------------------------------------------------------------------------------------------------------
 
 
