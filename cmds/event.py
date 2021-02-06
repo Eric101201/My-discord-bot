@@ -53,7 +53,7 @@ class Event(commands.Cog):
         await update_data(users, member)
 
         with open('users.json', 'w') as f:
-            json.dump(users, f)
+            json.dump(users, f, ensure_ascii=False, indent=4)
 
         channel = self.bot.get_channel(int(jdata['Join_channel']))
 
@@ -235,7 +235,7 @@ class Event(commands.Cog):
             await level_up(users, msg.author, msg)
 
             with open('users.json', 'w') as f:
-                json.dump(users, f)
+                json.dump(users, f, ensure_ascii=False, indent=4)
 
         #await self.bot.process_commands(msg)
 
