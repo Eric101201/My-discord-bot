@@ -79,6 +79,23 @@ class reaction(commands.Cog):
                 await msg.add_reaction("🔒")
                 await asyncio.sleep(0.3)
                 await msg.add_reaction("💾")
+                embedd = discord.Embed(title='使用說明', color=0x0000ff)
+                embedd.add_field(name='匿名模式', value=
+                                                    '```1️⃣ 公開匿名留言說明\n'
+                                                    '幫你們把留言以匿名公開出來\n'
+                                                    '只有擁有 @♕蹦蹦老大♕ \n'
+                                                    '的兩位群主知道是你留的言。\n'
+                                                    '---------------------------------\n'
+                                                    '2️⃣ 蹦蹦聽你說說明\n'
+                                                    '是讓你們訴說心事.煩惱之類的\n'
+                                                    '一樣只有擁有 @♕蹦蹦老大♕ \n'
+                                                    '的兩位群主知道並且不會公開給他人知道```')
+                embedd.add_field(name='範例', value='-匿名模式 (1️⃣/2️⃣)：1️⃣\n'
+                                                    '-內容： \n'
+                                                    '> XXX\n'
+                                                    '> XXX\n'
+                                                    '> XXX')
+                await self.channel_ticket.send(embed=embedd)
                 try:
                     ydata = yamlhook("channel.yaml").load()
                     ydata['ID'].append(msg.id)
@@ -124,7 +141,7 @@ class reaction(commands.Cog):
                         file.write(f'[{i.created_at}]{i.author} | {i.channel.name} | {i.content}<br> \n')
                     file.close()
 
-                    await channel_log.send(f" <#{payload.channel_id}> 頻道存檔紀錄")
+                    await channel_log.send(f" <#{payload.channel_id}> `{channel}` 頻道存檔紀錄")
                     await channel_log.send(file=discord.File(f"{channel}.html"))
 
                     text = f"此匿名 <#{payload.channel_id}> 以儲存, 操作者 {user.mention} 在 {time} 儲存."
