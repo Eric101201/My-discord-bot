@@ -7,7 +7,6 @@ from discord.ext import commands
 
 prefix = 'w+'
 
-
 def convert(time):
     pos = ["s", "m", "h", "d"]
 
@@ -31,6 +30,7 @@ class giveaway(commands.Cog):
     @commands.has_guild_permissions(administrator=True)
     @commands.command(name='gstart', help='抽獎系統 <抽獎倒數時間> <數量> <抽獎內容>')
     async def gstart(self, ctx, mins, num:int, *, prize:str):
+        await ctx.message.delete()
         nowtime = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
         time2 = convert(mins)
 
