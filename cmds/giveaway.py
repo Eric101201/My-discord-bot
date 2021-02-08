@@ -1,5 +1,3 @@
-import os
-
 import discord
 import asyncio
 import random
@@ -7,7 +5,6 @@ import time
 
 from datetime import datetime
 from discord.ext import commands
-from datahook import yamlhook
 
 prefix = 'w+'
 
@@ -92,13 +89,10 @@ class giveaway(commands.Cog):
 
         embed = discord.Embed(title='抽獎系統!', color=discord.Colour.orange())
         embed.add_field(name='抽獎獎品:', value=f'`{prize}`', inline=False)
-        embed.add_field(name='開始時間:', value=txt2.format(y, M, d, g) + '-' + txt.format(h, m, s), inline=False)
+        embed.add_field(name='開始時間:', value=f'{datetime.now()}''', inline=False)
         embed.set_footer(text=f'結束於 {mins} 後')
 
         my_msg = await ctx.send(embed=embed)
-        with open(f"{str(my_msg.id)}.yaml", 'w', encoding="utf8") as yd:
-            ddd = "ID : []\n"
-            yd.write(ddd)
 
         await my_msg.add_reaction("🎉")
 
@@ -113,30 +107,32 @@ class giveaway(commands.Cog):
         IDDD = []
         for i in range(num):
             wimmer = random.choice(users)
-            ydata = yamlhook(f"{str(my_msg.id)}.yaml").load()
-            if wimmer.id not in ydata['ID']:
+            if wimmer.name not in IDDD:
                 try:
-                    ydata = yamlhook(f"{str(my_msg.id)}.yaml").load()
-                    ydata['ID'].append(wimmer.id)
-                    yamlhook(f"{str(my_msg.id)}.yaml").Operate('ID', ydata['ID'])
                     IDDD.append(wimmer.name)
                     await ctx.send(f'{wimmer.mention}')
                 except ValueError:
                     print("not add or return1")
-            elif wimmer.id in ydata['ID']:
-                wimmer = random.choice(users)
+            elif wimmer.name in IDDD:
                 try:
-                    ydata = yamlhook(f"{str(my_msg.id)}.yaml").load()
-                    ydata['ID'].append(wimmer.id)
-                    yamlhook(f"{str(my_msg.id)}.yaml").Operate('ID', ydata['ID'])
-                    IDDD.append(wimmer.name)
-                    await ctx.send(f'{wimmer.mention}')
+                    if wimmer.name not in IDDD:
+                        IDDD.append(wimmer.name)
+                        await ctx.send(f'{wimmer.mention}')
+                    elif wimmer.name in IDDD:
+                        try:
+                            if wimmer.name not in IDDD:
+                                IDDD.append(wimmer.name)
+                                await ctx.send(f'{wimmer.mention}')
+                        except ValueError:
+                            print("not add or return1")
                 except ValueError:
                     print("not add or return1")
+            print(IDDD)
+
+
         embed2.add_field(name=f'中獎者:', value=f'{IDDD}', inline=True)
         embed2.add_field(name='訊息連結:', value=f'[點此傳送!!]({my_msg.jump_url})', inline=False)
         await ctx.send(embed=embed2)
-        os.remove(f"{str(my_msg.id)}.yaml")
 
 def setup(bot):
     bot.add_cog(giveaway(bot))
