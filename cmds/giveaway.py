@@ -104,35 +104,21 @@ class giveaway(commands.Cog):
         users.pop(users.index(self.bot.user))
         embed2 = discord.Embed(title='恭喜中獎者', color=discord.Colour.red())
         embed2.add_field(name='抽獎獎品:', value=f'`{prize}`', inline=False)
-        IDDD = []
-        for i in range(num):
-            wimmer = random.choice(users)
-            if wimmer.name not in IDDD:
-                try:
-                    IDDD.append(wimmer.name)
-                    await ctx.send(f'{wimmer.mention}')
-                except ValueError:
-                    print("not add or return1")
-            elif wimmer.name in IDDD:
-                try:
-                    if wimmer.name not in IDDD:
-                        IDDD.append(wimmer.name)
-                        await ctx.send(f'{wimmer.mention}')
-                    elif wimmer.name in IDDD:
-                        try:
-                            if wimmer.name not in IDDD:
-                                IDDD.append(wimmer.name)
-                                await ctx.send(f'{wimmer.mention}')
-                        except ValueError:
-                            print("not add or return1")
-                except ValueError:
-                    print("not add or return1")
-            print(IDDD)
+        online=[]
+        for member in users:
+            online.append(member.id)
+        random_online = random.sample(online, k=num)
+        for squad in range(1):
+            a = random.sample(random_online, k=num)
+            for i in a:
+                await ctx.send(f'<@{i}>')
+                embed2.add_field(name=f'中獎者:', value=f'<@{i}>', inline=True)
+            for name in a:
+                random_online.remove(name)
 
-
-        embed2.add_field(name=f'中獎者:', value=f'{IDDD}', inline=True)
         embed2.add_field(name='訊息連結:', value=f'[點此傳送!!]({my_msg.jump_url})', inline=False)
         await ctx.send(embed=embed2)
+        await ctx.send("================================")
 
 def setup(bot):
     bot.add_cog(giveaway(bot))
