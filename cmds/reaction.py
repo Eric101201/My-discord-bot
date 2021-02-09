@@ -111,10 +111,7 @@ class reaction(commands.Cog):
                     print("not add or return2")
             else:
                 member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
-                channel1 = self.bot.get_channel(CHANNEL_ID)
-                OAO = await channel1.send(f'{member.mention}您已開啟匿名頻道,請勿重複開啟')
-                await asyncio.sleep(5)
-                await OAO.delete()
+                await member.send(f'{member.mention}您已開啟匿名頻道,請勿重複開啟')
 
         ydata = yamlhook("channel.yaml").load()
         if payload.message_id in ydata['ID']:
