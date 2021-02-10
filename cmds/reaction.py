@@ -28,12 +28,11 @@ class reaction(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        MESSAGE_ID = 800279346799444008
-        CATEGORY_ID = 800231308672499713
-        BOT_ID = 593746376404500490
-        LOG_CHANNEL_ID = 800042340600643644
-        ROLE_ID = 701784905755000874
-        CHANNEL_ID = 800279155341918209
+        MESSAGE_ID = 809069046997581930
+        CATEGORY_ID = 808976065984200725
+        BOT_ID = 636559032324325417
+        LOG_CHANNEL_ID = 808976065984200730
+        ROLE_ID = 808976065354530827
 
         guild_id = payload.guild_id
         guild = self.bot.get_guild(guild_id)
@@ -53,6 +52,12 @@ class reaction(commands.Cog):
 
             ydata = yamlhook("channel.yaml").load()
             if payload.user_id not in ydata['USER']:
+                try:
+                    ydata = yamlhook("channel.yaml").load()
+                    ydata['USER'].append(payload.user_id)
+                    yamlhook("channel.yaml").Operate('USER', ydata['USER'])
+                except ValueError:
+                    print("not add or return2")
                 member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
                 support_role = guild.get_role(ROLE_ID)
                 category = guild.get_channel(CATEGORY_ID)
@@ -102,16 +107,10 @@ class reaction(commands.Cog):
                     yamlhook("channel.yaml").Operate('ID', ydata['ID'])
                 except ValueError:
                     print("not add or return1")
-
-                try:
-                    ydata = yamlhook("channel.yaml").load()
-                    ydata['USER'].append(payload.user_id)
-                    yamlhook("channel.yaml").Operate('USER', ydata['USER'])
-                except ValueError:
-                    print("not add or return2")
             else:
                 member = discord.utils.find(lambda m: m.id == payload.user_id, guild.members)
                 await member.send(f'{member.mention}您已開啟匿名頻道,請勿重複開啟')
+
 
         ydata = yamlhook("channel.yaml").load()
         if payload.message_id in ydata['ID']:
@@ -121,7 +120,7 @@ class reaction(commands.Cog):
                 await message.remove_reaction("✅", user)
                 await channel.send(f"此匿名頻道 <#{payload.channel_id}> 已通知管理員,請等待處理. <@&{ROLE_ID}>")
 
-            if 800007570483707965 in list(map(lambda x: x.id, payload.member.roles)):
+            if 808976065354530826 in list(map(lambda x: x.id, payload.member.roles)):
                 if emoji == "💾" and user_id != BOT_ID:
                     message = await channel.fetch_message(message_id)
                     await message.remove_reaction("💾", user)

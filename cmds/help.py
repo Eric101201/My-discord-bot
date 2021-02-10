@@ -29,7 +29,7 @@ class help(commands.Cog):
                               f'`{prefix}clean`  刪除文字 <刪除數量> \n'
                               f'`{prefix}say`  讓機器人說話 <內容> \n'
                               f'`{prefix}say2`  讓機器人說話 <頻道ID> <內容> \n'
-                              f'`{prefix}gstart` 抽獎系統 <抽獎倒數時間s m h d> <抽獎內容> \n'
+                              f'`{prefix}gstart` 抽獎系統 <抽獎倒數時間s m h d> <數量> <抽獎內容> \n'
                               f'`{prefix}開啟`  開啟頻道 <頻道名稱> \n'
                               f'`{prefix}關閉`  關閉頻道 **務必在想關閉的頻道內** \n'
                               f'`{prefix}上鎖`  上鎖頻道**務必在想上鎖的頻道內** <tag user> \n'

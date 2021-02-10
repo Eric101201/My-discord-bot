@@ -10,7 +10,7 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.log_channel = self.bot.get_channel(801804861779083275)
+        self.log_channel = self.bot.get_channel(808976065984200731)
 
     @Cog.listener()
     async def on_user_update(self, before, after):

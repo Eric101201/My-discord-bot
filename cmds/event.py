@@ -115,11 +115,12 @@ class Event(commands.Cog):
 
         embed = discord.Embed(
             title="", description="", color=(random.choice(jdata['顏色'])))
+        embed.set_thumbnail(url=member.avatar_url)
         embed.set_author(
             name="OwO Bot",
             url="https://discord.gg/nRa2994",
             icon_url=
-            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
+            "https://images-ext-1.discordapp.net/external/x7kxTszr-e7WXPCkD11lhepLD457nLcMleTA4B1t8kM/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/636559032324325417/280943367acac65988c95de80ef5a1e2.webp?width=677&height=677"
         )
         embed.add_field(
             name='歡迎加入同樂群組',
@@ -199,11 +200,12 @@ class Event(commands.Cog):
 
         embed1 = discord.Embed(
             title="", description="", color=(random.choice(jdata['顏色'])))
+        embed1.set_thumbnail(url=member.avatar_url)
         embed1.set_author(
             name="OwO Bot",
             url="https://discord.gg/nRa2994",
             icon_url=
-            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
+            "https://images-ext-1.discordapp.net/external/x7kxTszr-e7WXPCkD11lhepLD457nLcMleTA4B1t8kM/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/636559032324325417/280943367acac65988c95de80ef5a1e2.webp?width=677&height=677"
         )
         embed1.add_field(
             name='QAQ',
@@ -215,12 +217,9 @@ class Event(commands.Cog):
 
         embed1.set_footer(
             text=(random.choice(jdata['加入aaa'])),
-            icon_url=
-            "https://lh3.googleusercontent.com/kyAR5RR9sqZPPNHbDxUdKVlGcmYzk96Jh-6TA-grwDMEcTLWxPm8ltAUl8zsRG7YTCaLio8XHiL5oFJBl9tuZcBl0BRJBoqdnidmwZtPdd7n5th7w-tcbPB1JFBp07vR_PQ-qpk2SnqAQ6cx-nOR7JDcSwrTYS7DNPM_qgySSlmwLWUmiK2C8zWDU500u-dVn-w85d6Ajf8Jsvm2UiOiLIxgrMx-ARIrQHgnjgGlbE9_hLvMas7LJSm3-OaRGlAnAehT19DIuKMxyofSZm0PthCeq3-ie-DyvJdoAtdx3L0QPKIJnuTa-IgcMwsNLXmADtegiD42GA2Uc55kJG2o-WyuuwJNwo4q9DNYXU3ZX6cE25PNq0Us1wQ_7bGWRtHohSfcQjDE2vTHZvLC0awd2V-Koeu8iu592EefZEurCLwYzRd0nCyJIYTRBYG6eTwcgthBffnvM6actC0y4BiXyz7hJnyiJXjqOjy21cEx2HJ4Vaku5sVMwDXbFC7lDvqq67BWqekyI_9yO15dj-PpDZw9o48OfypG4J3hZDBAEbzABB7XYPjxZMF0YJW060s3iHuj36G-o-tQzO23eu0pGFiTZG8QD9ozSVDc_wF-HozMzBHmiovJvHL_addITUYYqALBGu3xYF228ERr0kRL5zGzVFpMxfqg6EfiXTFXKG8pmBxcQPq0ww=w512-h448-no"
         )
         await channel.send(embed=embed1)
 
-    
     @commands.Cog.listener()
     async def on_message(self, msg):
 
@@ -279,7 +278,7 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        if int(payload.message_id) == 713019873839546400:
+        if int(payload.message_id) == 809039528341143603:
             user = payload.member
 
             guild = discord.utils.find(
