@@ -33,48 +33,47 @@ async def status_task():
         await asyncio.sleep(5)
 
 async def sosup():
-    while True:
-        with open('time.json', mode='r', encoding='UTF8') as jfile:
-            svset = json.load(jfile)
-        tokenAPI = jdata["APITOKEN"]
-        API = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization={tokenAPI}"  # 大型地震
-        API2 = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={tokenAPI}"  # 小型地震
-        MOHW = f"https://www.mohw.gov.tw/rss-16-1.html"  # 衛福部
+    with open('time.json', mode='r', encoding='UTF8') as jfile:
+        svset = json.load(jfile)
+    tokenAPI = jdata["APITOKEN"]
+    API = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization={tokenAPI}"  # 大型地震
+    API2 = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={tokenAPI}"  # 小型地震
+    MOHW = f"https://www.mohw.gov.tw/rss-16-1.html"  # 衛福部
 
-        eew = (requests.get(API)).json()
-        eew2 = (requests.get(API2)).json()
-        cov = feedparser.parse(MOHW)
+    eew = (requests.get(API)).json()
+    eew2 = (requests.get(API2)).json()
+    cov = feedparser.parse(MOHW)
 
-        originTime = eew['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 大型地震發生時間
-        originTime2 = eew2["records"]["earthquake"][0]["earthquakeInfo"]["originTime"]  # 小型地震發生時間
-        newsID = cov["entries"][0]['newsid']
+    originTime = eew['records']['earthquake'][0]["earthquakeInfo"]["originTime"]  # 大型地震發生時間
+    originTime2 = eew2["records"]["earthquake"][0]["earthquakeInfo"]["originTime"]  # 小型地震發生時間
+    newsID = cov["entries"][0]['newsid']
 
-        site = ['BIGSOS'] + ['SMSOS'] + ['NEWMOHW']
+    site = ['BIGSOS'] + ['SMSOS'] + ['NEWMOHW']
 
-        for i in range(len(site)):
-            if site[i] not in svset:
-                svset[site[i]] = ""
-                print("建立網址紀錄")
-        for i in range(len(site)):
-            if site[i] == 'BIGSOS':
-                if originTime != svset[site[i]]:
-                    channel = bot.get_channel(701779007980437826)
-                    svset[site[i]] = originTime
-                    await bigsos(channel, API)
-            if site[i] == 'SMSOS':
-                if originTime2 != svset[site[i]]:
-                    channel = bot.get_channel(701779007980437826)
-                    svset[site[i]] = originTime2
-                    await smsos(channel, API2)
-            if site[i] == 'NEWMOHW':
-                if newsID not in svset[site[i]]:
-                    channel = bot.get_channel(701779007980437826)
-                    svset[site[i]].append(newsID)
-                    await NEWMOHW(channel, MOHW)
-        with open('time.json', 'w', encoding='UTF8') as outfile:
-            json.dump(svset, outfile, ensure_ascii=False, indent=4)
-        await asyncio.sleep(10)
-        bot.loop.create_task(sosup())
+    for i in range(len(site)):
+        if site[i] not in svset:
+            svset[site[i]] = ""
+            print("建立網址紀錄")
+    for i in range(len(site)):
+        if site[i] == 'BIGSOS':
+            if originTime != svset[site[i]]:
+                channel = bot.get_channel(701779007980437826)
+                svset[site[i]] = originTime
+                await bigsos(channel, API)
+        if site[i] == 'SMSOS':
+            if originTime2 != svset[site[i]]:
+                channel = bot.get_channel(701779007980437826)
+                svset[site[i]] = originTime2
+                await smsos(channel, API2)
+        if site[i] == 'NEWMOHW':
+            if newsID not in svset[site[i]]:
+                channel = bot.get_channel(701779007980437826)
+                svset[site[i]].append(newsID)
+                await NEWMOHW(channel, MOHW)
+    with open('time.json', 'w', encoding='UTF8') as outfile:
+        json.dump(svset, outfile, ensure_ascii=False, indent=4)
+    await asyncio.sleep(10)
+    bot.loop.create_task(sosup())
 
 @bot.event
 async def on_ready():
