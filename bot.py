@@ -58,13 +58,11 @@ async def sosup():
         for i in range(len(site)):
             if site[i] == 'BIGSOS':
                 if originTime != svset[site[i]]:
-                    await asyncio.sleep(30)
                     channel = bot.get_channel(701779007980437826)
                     svset[site[i]] = originTime
                     await bigsos(channel, API)
             if site[i] == 'SMSOS':
                 if originTime2 != svset[site[i]]:
-                    await asyncio.sleep(30)
                     channel = bot.get_channel(701779007980437826)
                     svset[site[i]] = originTime2
                     await smsos(channel, API2)
@@ -76,6 +74,7 @@ async def sosup():
         with open('time.json', 'w', encoding='UTF8') as outfile:
             json.dump(svset, outfile, ensure_ascii=False, indent=4)
         await asyncio.sleep(10)
+        bot.loop.create_task(sosup())
 
 @bot.event
 async def on_ready():
