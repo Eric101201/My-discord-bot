@@ -47,19 +47,17 @@ class Main(commands.Cog):
     @commands.bot_has_guild_permissions(manage_channels=True)
     async def 上鎖(self, ctx, user: discord.Member, channel: discord.TextChannel=None):
         channel = channel or ctx.channel
-        if ctx.author not in channel.overwrites:
-            overwrites = {
-                ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False),
-                user: discord.PermissionOverwrite(send_messages=False, read_messages=False)
-            }
-            await channel.edit(overwrites=overwrites)
+        if user not in channel.overwrites:
+            overwrite = discord.PermissionOverwrite()
+            overwrite.send_messages = None
+            overwrite.read_messages = None
+            await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 上鎖.")
         elif channel.overwrites[user].send_messages == True or channel.overwrites[user].send_messages == None:
-            overwrites = channel.overwrites[user]
-            overwrites.send_messages = False
-            overwrites.read_messages = False
-            ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)
-            await channel.set_permissions(user, overwrite=overwrites)
+            overwrite = discord.PermissionOverwrite()
+            overwrite.send_messages = None
+            overwrite.read_messages = None
+            await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 上鎖.")
         else:
             await ctx.send(f"您已將 {user.mention} 上鎖.")
@@ -72,19 +70,17 @@ class Main(commands.Cog):
     @commands.bot_has_guild_permissions(manage_channels=True)
     async def 解鎖(self, ctx, user: discord.Member, channel: discord.TextChannel=None):
         channel = channel or ctx.channel
-        if ctx.author not in channel.overwrites:
-            overwrites = {
-                ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False),
-                user: discord.PermissionOverwrite(send_messages=True, read_messages=True)
-            }
-            await channel.edit(overwrites=overwrites)
+        if user not in channel.overwrites:
+            overwrite = discord.PermissionOverwrite()
+            overwrite.send_messages = True
+            overwrite.read_messages = True
+            await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 解鎖.")
         elif channel.overwrites[user].send_messages == False or channel.overwrites[user].send_messages == None:
-            overwrites = channel.overwrites[user]
-            overwrites.send_messages = False
-            overwrites.read_messages = False
-            ctx.guild.default_role: discord.PermissionOverwrite(read_messages=False, send_messages=False)
-            await channel.set_permissions(user, overwrite=overwrites)
+            overwrite = discord.PermissionOverwrite()
+            overwrite.send_messages = True
+            overwrite.read_messages = True
+            await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 解鎖.")
         else:
             await ctx.send(f"您已將 {user.mention} 解鎖.")
