@@ -5,7 +5,7 @@ import asyncio
 import requests
 import feedparser
 
-from discord.ext import commands
+from discord.ext import commands, tasks
 from sos import bigsos
 from sos import smsos
 from sos import NEWMOHW
@@ -32,6 +32,7 @@ async def status_task():
         await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
         await asyncio.sleep(5)
 
+@tasks.loop(seconds=10)
 async def sosup():
     with open('time.json', mode='r', encoding='UTF8') as jfile:
         svset = json.load(jfile)
@@ -57,32 +58,30 @@ async def sosup():
     for i in range(len(site)):
         if site[i] == 'BIGSOS':
             if originTime != svset[site[i]]:
-                channel = bot.get_channel(701779007980437826)
+                channel = bot.get_channel(809034393355157514)
                 svset[site[i]] = originTime
-                await bigsos(channel, API)                
+                await bigsos(channel, API)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'SMSOS':
             if originTime2 != svset[site[i]]:
-                channel = bot.get_channel(701779007980437826)
+                channel = bot.get_channel(809034393355157514)
                 svset[site[i]] = originTime2
-                await smsos(channel, API2)                
+                await smsos(channel, API2)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'NEWMOHW':
             if newsID not in svset[site[i]]:
-                channel = bot.get_channel(701779007980437826)
+                channel = bot.get_channel(809034639016460338)
                 svset[site[i]].append(newsID)
                 await NEWMOHW(channel, MOHW)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
-    await asyncio.sleep(10)
-    bot.loop.create_task(sosup())
 
 @bot.event
 async def on_ready():
     bot.loop.create_task(status_task())
-    bot.loop.create_task(sosup())
+    sosup.start()
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
