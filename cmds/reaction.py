@@ -3,6 +3,7 @@ import random
 import asyncio
 import datetime
 
+from pytz import timezone
 from discord.ext import commands
 from datetime import datetime
 from datahook import yamlhook
@@ -28,6 +29,9 @@ class reaction(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+        tz = timezone('Asia/Taipei')
+        nowtime = datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
+
         MESSAGE_ID = 809069046997581930
         CATEGORY_ID = 808976065984200725
         BOT_ID = 636559032324325417
@@ -125,9 +129,6 @@ class reaction(commands.Cog):
                     message = await channel.fetch_message(message_id)
                     await message.remove_reaction("💾", user)
 
-                    now = datetime.now()
-                    time = now.strftime(str("%d.%m.%Y") + " at " + str("%H:%M"))
-
                     channel_log = self.bot.get_channel(LOG_CHANNEL_ID)
 
                     messages = await channel.history(limit=None).flatten()
@@ -140,7 +141,7 @@ class reaction(commands.Cog):
                     await channel_log.send(f" <#{payload.channel_id}> `{channel}` 頻道存檔紀錄")
                     await channel_log.send(file=discord.File(f"{channel}.html"))
 
-                    text = f"此匿名 <#{payload.channel_id}> 以儲存, 操作者 {user.mention} 在 {time} 儲存."
+                    text = f"此匿名 <#{payload.channel_id}> 以儲存, 操作者 {user.mention} 在 {nowtime} 儲存."
                     embed = discord.Embed(
                         title="儲存匿名!",
                         description=text,
@@ -152,11 +153,8 @@ class reaction(commands.Cog):
                 message = await channel.fetch_message(message_id)
                 await message.remove_reaction("🔒", user)
 
-                now = datetime.now()
-                time = now.strftime(str("%d.%m.%Y") + " at " + str("%H:%M"))
-
                 channel_log = self.bot.get_channel(LOG_CHANNEL_ID)
-                text = f"此匿名 `{channel}` 即將關閉, 操作者 {user.mention} 在 {time} 刪除."
+                text = f"此匿名 `{channel}` 即將關閉, 操作者 {user.mention} 在 {nowtime} 刪除."
 
                 embed = discord.Embed(
                     title="關閉匿名!",

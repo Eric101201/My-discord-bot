@@ -1,5 +1,6 @@
 import discord
 
+from pytz import timezone
 from datetime import datetime
 from discord.ext import commands
 
@@ -11,7 +12,8 @@ class help(commands.Cog):
 
     @commands.command(name='help', help='指令列表')
     async def help(self, ctx):
-        nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
+        tz = timezone('Asia/Taipei')
+        nowtime = datetime.now(tz).strftime("%Y/%m/%d %H:%M")
 
         embed = discord.Embed(title="指令列表", description="", color=ctx.author.color)
         embed.add_field(name='》一般用戶使用OwO',
@@ -20,7 +22,7 @@ class help(commands.Cog):
                               f'`{prefix}ping`  機器人延遲 \n'
                               f'`{prefix}google`  Google搜尋 <搜尋內容> \n'
                               f'`{prefix}dcapi`  Discord.py搜尋 <搜尋內容> \n'
-                              f'`{prefix}level`  查詢等級 \n',
+                              f'`{prefix}rank`  查詢等級 \n',
                         inline=False)
 
         embed.add_field(name='》管理員以及開發者使用',

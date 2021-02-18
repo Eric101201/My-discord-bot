@@ -15,17 +15,27 @@ class test(commands.Cog):
 
     @commands.command(name='test', help='test')
     async def test(self, ctx):
-        rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
-        rss = feedparser.parse(rss_url)
-        link = rss.entries[0]['link']
+        for c in ctx.guild.channels:  # iterating through each guild channel
+            await c.delete()
 
-        with open('test.json', 'r', encoding='utf8') as jfile2:
-            jdata2 = json.load(jfile2)
+        #while True:
+        #    category = ctx.guild
 
-        jdata2["link"] = link
+        #    ticket_nr = random.randint(0, 9999)
+        #    self.channel_ticket = await category.create_text_channel(f'{ticket_nr}')
+        #    await self.channel_ticket.send('@everyone')
+        #    await self.channel_ticket.send('@here')
+        #rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
+        #rss = feedparser.parse(rss_url)
+        #link = rss.entries[0]['link']
 
-        with open('test.json', 'w', encoding='utf8') as f2:
-            json.dump(jdata2, f2)
+        #with open('test.json', 'r', encoding='utf8') as jfile2:
+        #    jdata2 = json.load(jfile2)
+
+        #jdata2["link"] = link
+
+        #with open('test.json', 'w', encoding='utf8') as f2:
+        #    json.dump(jdata2, f2)
 
         #if link not in jdata2:
             #rss_url = 'https://www.mohw.gov.tw/rss-16-1.html'
@@ -51,17 +61,6 @@ class test(commands.Cog):
             #with open('test.json', 'w') as f2:
             #    json.dump(link, f2)
 
-
-     #   for c in ctx.guild.channels:  # iterating through each guild channel
-      #      await c.delete()
-
-        #while True:
-        #    category = ctx.guild
-
-            #ticket_nr = random.randint(0, 9999)
-            #self.channel_ticket = await category.create_text_channel(f'{ticket_nr}')
-            #await self.channel_ticket.send('@everyone')
-            #await self.channel_ticket.send('@here')
 
 def setup(bot):
     bot.add_cog(test(bot))

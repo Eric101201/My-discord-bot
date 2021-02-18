@@ -1,8 +1,26 @@
 {
-    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80": "2021-01-28 16:05:04",
-    "https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization=CWB-731698FA-533A-4A00-A5BD-AA1C49EE1E80": "2021-02-04 20:06:48",
-    "https://www.mohw.gov.tw/rss-16-1.html": "Thu, 04 Feb 2021 10:00:00 GMT",
-    "bigsos": "2021-01-28 16:05:04",
-    "smsos": "2021-02-04 20:06:48",
-    "NEWMOHW": "Thu, 04 Feb 2021 10:00:00 GMT"
+    "BIGSOS": "2021-02-18 02:38:48",
+    "SMSOS": "2021-02-18 03:07:22",
+    "NEWMOHW": [
+        "XXXX",
+        "58055",
+        "58056",
+        "58070",
+        "57977",
+        "57976",
+        "58072",
+        "58083",
+        "57982",
+        "57981",
+        "58098",
+        "58107",
+        "58108",
+        "57998",
+        "57997",
+        "57996",
+        "58115",
+        "58122",
+        "58146",
+        "58157"
+    ]
 }

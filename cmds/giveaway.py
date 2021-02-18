@@ -1,8 +1,8 @@
 import discord
 import asyncio
 import random
-
 import datetime
+from pytz import timezone
 from discord.ext import commands
 
 prefix = 'w+'
@@ -31,7 +31,8 @@ class giveaway(commands.Cog):
     @commands.command(name='gstart', help='抽獎系統 <抽獎倒數時間> <數量> <抽獎內容>')
     async def gstart(self, ctx, mins, num:int, *, prize:str):
         await ctx.message.delete()
-        nowtime = datetime.datetime.now().strftime("%Y/%m/%d %H:%M")
+        tz = timezone('Asia/Taipei')
+        nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M")
         time2 = convert(mins)
 
         embed = discord.Embed(title='抽獎系統!', color=discord.Colour.orange())

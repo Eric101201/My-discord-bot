@@ -58,21 +58,21 @@ async def sosup():
     for i in range(len(site)):
         if site[i] == 'BIGSOS':
             if originTime != svset[site[i]]:
-                channel = bot.get_channel(809034393355157514)
+                channel = bot.get_channel(808976066353037364)
                 svset[site[i]] = originTime
                 await bigsos(channel, API)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'SMSOS':
             if originTime2 != svset[site[i]]:
-                channel = bot.get_channel(809034393355157514)
+                channel = bot.get_channel(808976066353037364)
                 svset[site[i]] = originTime2
                 await smsos(channel, API2)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'NEWMOHW':
             if newsID not in svset[site[i]]:
-                channel = bot.get_channel(809034639016460338)
+                channel = bot.get_channel(808976066353037364)
                 svset[site[i]].append(newsID)
                 await NEWMOHW(channel, MOHW)
                 with open('time.json', 'w', encoding='UTF8') as outfile:

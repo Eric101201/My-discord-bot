@@ -1,30 +1,42 @@
 {
     "641564293237702656": {
-        "experience": 97,
+        "experience": 184,
         "level": 3
     },
-    "593666614717841419": {
-        "experience": 1583,
-        "level": 6
-    },
     "539075763471777802": {
-        "experience": 135,
+        "experience": 164,
         "level": 3
     },
     "574515974573785098": {
-        "experience": 70,
-        "level": 2
+        "experience": 101,
+        "level": 3
     },
     "629462535166230538": {
         "experience": 10,
         "level": 1
     },
     "688181698822799414": {
-        "experience": 84,
+        "experience": 155,
         "level": 3
     },
     "645588343228334080": {
         "experience": 4,
         "level": 1
+    },
+    "290349363811581952": {
+        "experience": 33,
+        "level": 2
+    },
+    "540550017098711042": {
+        "experience": 3,
+        "level": 1
+    },
+    "467532880625664000": {
+        "experience": 45,
+        "level": 2
+    },
+    "593666614717841419": {
+        "experience": 126,
+        "level": 3
     }
 }

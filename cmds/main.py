@@ -13,10 +13,10 @@ class Main(commands.Cog):
         self.bot = bot
 
     @commands.command(name='開啟',help='開啟頻道 <頻道名稱>')
-    @commands.has_guild_permissions(administrator=True)
-    @commands.has_any_role('owo', 'Bot')
-    @commands.guild_only()
-    @commands.bot_has_guild_permissions(manage_channels=True)
+    #@commands.has_guild_permissions(administrator=True)
+    #@commands.has_any_role('owo', 'Bot')
+    #@commands.guild_only()
+    #@commands.bot_has_guild_permissions(manage_channels=True)
     async def 開啟(self, ctx, *, name):
         user = ctx.author
         overwrites = {
@@ -48,15 +48,11 @@ class Main(commands.Cog):
     async def 上鎖(self, ctx, user: discord.Member, channel: discord.TextChannel=None):
         channel = channel or ctx.channel
         if user not in channel.overwrites:
-            overwrite = discord.PermissionOverwrite()
-            overwrite.send_messages = None
-            overwrite.read_messages = None
+            overwrite = discord.PermissionOverwrite(send_messages=None, read_messages = None)
             await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 上鎖.")
         elif channel.overwrites[user].send_messages == True or channel.overwrites[user].send_messages == None:
-            overwrite = discord.PermissionOverwrite()
-            overwrite.send_messages = None
-            overwrite.read_messages = None
+            overwrite = discord.PermissionOverwrite(send_messages=None, read_messages = None)
             await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 上鎖.")
         else:
@@ -71,56 +67,15 @@ class Main(commands.Cog):
     async def 解鎖(self, ctx, user: discord.Member, channel: discord.TextChannel=None):
         channel = channel or ctx.channel
         if user not in channel.overwrites:
-            overwrite = discord.PermissionOverwrite()
-            overwrite.send_messages = True
-            overwrite.read_messages = True
+            overwrite = discord.PermissionOverwrite(send_messages=True, read_messages = True)
             await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 解鎖.")
         elif channel.overwrites[user].send_messages == False or channel.overwrites[user].send_messages == None:
-            overwrite = discord.PermissionOverwrite()
-            overwrite.send_messages = True
-            overwrite.read_messages = True
+            overwrite = discord.PermissionOverwrite(send_messages=True, read_messages = True)
             await channel.set_permissions(user, overwrite=overwrite)
             await ctx.send(f"您已將 {user.mention} 解鎖.")
         else:
             await ctx.send(f"您已將 {user.mention} 解鎖.")
-
-    @commands.command(name='level', help='查詢等級')
-    async def level(self, ctx, member: discord.Member = None):
-        if not member:
-            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
-            id = ctx.message.author.id
-
-            with open('users.json', 'r') as f:
-                users = json.load(f)
-
-            lvl = users[str(id)]['level']
-            exp = users[str(id)]['experience']
-
-            embed = discord.Embed(title='等級系統', color=ctx.author.color)
-            embed.set_thumbnail(url=ctx.author.avatar_url)
-            embed.add_field(name='目前你的等級', value=f'{lvl}', inline=False)
-            embed.add_field(name='目前你的經驗值', value=f'{exp}', inline=False)
-            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
-
-            await ctx.send(embed=embed)
-        else:
-            nowtime = datetime.now().strftime("%Y/%m/%d %H:%M")
-            id = member.id
-
-            with open('users.json', 'r') as f:
-                users = json.load(f)
-
-            lvl = users[str(id)]['level']
-            exp = users[str(id)]['experience']
-
-            embed = discord.Embed(title='等級系統', color=ctx.author.color)
-            embed.set_thumbnail(url=member.avatar_url)
-            embed.add_field(name=f'目前 "{member}" 的等級', value=f'{lvl}', inline=False)
-            embed.add_field(name=f'目前 "{member}" 的經驗值', value=f'{exp}', inline=False)
-            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
-
-            await ctx.send(embed=embed)
 
     @commands.has_guild_permissions(administrator=True)
     @commands.command(name='addexp', help='新增經驗值 <數字> <tag user>')
