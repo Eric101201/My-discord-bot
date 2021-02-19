@@ -23,6 +23,7 @@ class help(commands.Cog):
                               f'`{prefix}google`  Google搜尋 <搜尋內容> \n'
                               f'`{prefix}dcapi`  Discord.py搜尋 <搜尋內容> \n'
                               f'`{prefix}rank`  查詢等級 \n'
+                              f'`{prefix}levels`  查詢排行 \n'
                               f'`{prefix}listinvite`  查詢此伺服器所有邀請連結 \n'
                               f'`{prefix}addinvite`  建立邀請連結 <邀請有效時長s> <邀請最大使用次數>',
                         inline=False)

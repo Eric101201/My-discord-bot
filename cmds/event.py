@@ -237,8 +237,6 @@ class Event(commands.Cog):
             with open('users.json', 'w') as f:
                 json.dump(users, f, ensure_ascii=False, indent=4)
 
-        #await self.bot.process_commands(msg)
-
         if msg.content.lower().startswith(
                 '蹦假崩') and msg.author != self.bot.user:
             await msg.delete()
