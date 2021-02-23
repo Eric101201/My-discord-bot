@@ -142,6 +142,15 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
+
+        with open('users.json', 'r') as f:
+            users = json.load(f)
+
+        users.pop(str(member.id))
+
+        with open('users.json', 'w') as f:
+            json.dump(users, f, ensure_ascii=False, indent=4)
+
         channel = self.bot.get_channel(int(jdata['Leave_channel']))
 
         _weekday = {

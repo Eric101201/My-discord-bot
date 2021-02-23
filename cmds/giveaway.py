@@ -56,6 +56,7 @@ class giveaway(commands.Cog):
         date[my_msg.id] = {}
         date[my_msg.id]['start_msg_id'] = str(my_msg.id)
         date[my_msg.id]['end_msg_id'] = ""
+        date[my_msg.id]['channel_id'] = str(ctx.channel.id)
         date[my_msg.id]['title'] = name
         date[my_msg.id]['prize'] = prize
         date[my_msg.id]['Quantity'] = str(num)

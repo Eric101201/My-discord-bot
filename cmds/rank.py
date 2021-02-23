@@ -6,6 +6,8 @@ from io import BytesIO
 from requests import get as rget
 from PIL import Image, ImageDraw, ImageFont
 
+
+
 class rank(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -42,6 +44,21 @@ class rank(commands.Cog):
                     if pow(abs(i - float(r2/2) + 0.5), 2) + pow(abs(j - float(r2/2) + 0.5), 2) <= pow(float(r2/2), 2):
                         pimb[i, j] = pima[i, j]
             num = int(xp2)/int((int(level)+1)**4)
+
+            aa = []
+            data = list(users.keys())
+            for i in range(len(users)):
+                try:
+                    _id = data[i]
+                    level = users[data[i]]["level"]
+                    xp = users[data[i]]["experience"]
+
+                    aa.append((int(_id), int(level), int(xp)))
+                except KeyError:
+                    continue
+            aa.sort(key=lambda x: x[2], reverse=True)
+            lvll = aa.index([i for i in aa if str(i[0]) == str(author.id)][0])
+
             image = Image.open('level/background.png')
             drawObject = ImageDraw.Draw(image)
             drawObject.ellipse((256+600,182,256+40+600,182+40),fill=(72,75,78))
@@ -58,7 +75,7 @@ class rank(commands.Cog):
             image.paste(avatar, (45, 45))
             drawObject.multiline_text((275, 123), str(author.name), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=55))
             drawObject.multiline_text((275, 57), 'RANK', fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=37))
-            drawObject.multiline_text((360, 35), '#' + str(author.discriminator), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=65))
+            drawObject.multiline_text((360, 35), '#' + str(lvll+1), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=65))
             drawObject.multiline_text((630, 57), 'LeveL', fill=(123, 175, 221), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=37))
             drawObject.multiline_text((720, 35), str(level), fill=(123, 175, 221), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=65))
             xp = drawObject.textsize(str(int(xp2)) + '/' + str((int(level)+1)**4) + 'XP', font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=45))

@@ -27,11 +27,13 @@ class levels(commands.Cog):
         aa.sort(key=lambda x: x[2], reverse=True)
         raa = 1
         for i in aa:
-            text.append(f'#{raa} | `level: {str(i[1])} , xp: {str(i[2])}` | ID: <@{str(i[0])}>\n')
+            text.append(f'`#{raa} | level: {str(i[1])} , xp: {str(i[2])}` | ID: <@{str(i[0])}>\n')
             raa+=1
+            if i == aa[9]:
+                break
         text[0] = "**" + text[0] + "**"
         num = aa.index([i for i in aa if str(i[0]) == str(ctx.author.id)][0])
-        levels = discord.Embed(title="此伺服器的等級排行", color=0x00ff40, description="".join(text)).set_footer(text="你的排名: {}".format(num+1), icon_url=ctx.author.avatar_url)
+        levels = discord.Embed(title="此伺服器的等級排行(前10名)", color=0x00ff40, description="".join(text)).set_footer(text="你的排名: {}".format(num+1), icon_url=ctx.author.avatar_url)
         await ctx.send(embed=levels)
 
 def setup(bot):
