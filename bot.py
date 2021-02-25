@@ -1,9 +1,9 @@
 import discord
 import json
-import os
 import asyncio
 import requests
 import feedparser
+import os
 
 from discord.ext import commands, tasks
 from sos import bigsos

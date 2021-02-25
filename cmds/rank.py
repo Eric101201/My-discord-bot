@@ -50,10 +50,10 @@ class rank(commands.Cog):
             for i in range(len(users)):
                 try:
                     _id = data[i]
-                    level = users[data[i]]["level"]
+                    level2 = users[data[i]]["level"]
                     xp = users[data[i]]["experience"]
 
-                    aa.append((int(_id), int(level), int(xp)))
+                    aa.append((int(_id), int(level2), int(xp)))
                 except KeyError:
                     continue
             aa.sort(key=lambda x: x[2], reverse=True)
@@ -73,13 +73,13 @@ class rank(commands.Cog):
             drawObject.ellipse((256,182,256+40,182+40),fill=(123,175,221))
             drawObject.rectangle((256+(40/2),182, 256+w+(40/2), 182+40),fill=(123,175,221))
             image.paste(avatar, (45, 45))
-            drawObject.multiline_text((275, 123), str(author.name), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=55))
+            drawObject.multiline_text((275, 123), str(author.name), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=50))
             drawObject.multiline_text((275, 57), 'RANK', fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=37))
             drawObject.multiline_text((360, 35), '#' + str(lvll+1), fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=65))
             drawObject.multiline_text((630, 57), 'LeveL', fill=(123, 175, 221), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=37))
             drawObject.multiline_text((720, 35), str(level), fill=(123, 175, 221), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=65))
             xp = drawObject.textsize(str(int(xp2)) + '/' + str((int(level)+1)**4) + 'XP', font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=45))
-            drawObject.multiline_text((934-xp[1]-205, 140), str(int(xp2)) + '/' + str((int(level)+1)**4) + 'XP', fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=45))
+            drawObject.multiline_text((934-xp[1]-220, 140), str(int(xp2)) + '/' + str((int(level)+1)**4) + 'XP', fill=(246, 246, 246), font=ImageFont.truetype('level/華康兒風體W4_1.ttc', size=45))
             image.save('level/rank.png')
             await ctx.send(file=File('level/rank.png'))
 

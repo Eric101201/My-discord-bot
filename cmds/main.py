@@ -26,7 +26,7 @@ class Main(commands.Cog):
         }
         channel = await ctx.guild.create_text_channel(name=str(ctx.author) + f'-{name}', overwrites=overwrites, category=self.bot.get_channel(798926957135527966))
         await ctx.channel.send(f"您已開啟了新的頻道 <#{channel.id}> 。")
-        await channel.send(f"{ctx.author.mention} 您已開啟新的匿名頻道 請輸入匿名的內容.")
+        await channel.send(f"{ctx.author.mention} 您已開啟新的頻道.")
         await channel.send("***小提示:此頻道只能交給管理員關閉,輸入完畢請標註***  `@♕蹦蹦老大♕` ***並等待管理員處理***")
 
     @commands.command(name='關閉',help='關閉頻道 **務必在想關閉的頻道內**')
