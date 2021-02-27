@@ -1,0 +1,8 @@
+discord.py==1.6.0
+feedparser
+Pillow
+requests
+asyncio
+pytz
+psutil
+pyyaml

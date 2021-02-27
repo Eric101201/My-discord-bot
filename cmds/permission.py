@@ -1,7 +1,8 @@
 import discord
 import random
 import json
-
+import sys
+import subprocess
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
@@ -40,6 +41,13 @@ class permission(commands.Cog):
         await ctx.send("`機器人關機中...`")
         # console message
         await self.bot.close()
+
+    @commands.command(name='rebot', help='rebot')
+    async def rebot(self, ctx):
+        """Restarts the bot"""
+        await ctx.send("Restarting...")
+        await self.bot.logout()
+        subprocess.call([sys.executable, "bot.py"])
 
     @commands.command(name='kick', help='踢出使用者 <tag user> <原因>')
     @commands.has_guild_permissions(administrator=True)
