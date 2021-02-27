@@ -51,7 +51,6 @@ class help(commands.Cog):
                         inline=False)
         embed.add_field(name='> 管理',
                         value='```'
-
                                 f'{prefix}clean       |刪除文字 <刪除數量> \n'
                                 f'{prefix}kick        |踢出使用者 <tag user> <原因> \n'
                                 f'{prefix}ban         |封鎖使用者 <tag user> <原因> \n'
@@ -71,7 +70,6 @@ class help(commands.Cog):
                                 f'{prefix}load        |載入 <Cog mod> \n'
                                 f'{prefix}reload      |重新載入 <Cog mod> \n'
                                 f'{prefix}unload      |移除 <Cog mod> \n'
-                                f'{prefix}unban       |解除封鎖使用者 <tag user> <原因> \n'
                                 f'{prefix}rebot       |重啟機器人 \n'
                                 f'{prefix}bye         |關閉機器人 \n'
                                 f'```',
