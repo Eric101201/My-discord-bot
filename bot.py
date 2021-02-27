@@ -23,14 +23,14 @@ class sosCommand( commands.DefaultHelpCommand ):
 
 bot = commands.Bot(command_prefix=prefix, help_command = sosCommand(), intents=intents, owner_ids="593666614717841419")
 
+@tasks.loop(seconds=1)
 async def status_task():
-    while True:
-        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name=F"{prefix}help"))
-        await asyncio.sleep(5)
-        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
-        await asyncio.sleep(5)
-        await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
-        await asyncio.sleep(5)
+    await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name=F"{prefix}help"))
+    await asyncio.sleep(5)
+    await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching, name="堅果真好吃OwO"))
+    await asyncio.sleep(5)
+    await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
+    await asyncio.sleep(5)
 
 @tasks.loop(seconds=10)
 async def sosup():
@@ -80,8 +80,8 @@ async def sosup():
 
 @bot.event
 async def on_ready():
-    bot.loop.create_task(status_task())
     sosup.start()
+    status_task.start()
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
