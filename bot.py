@@ -4,6 +4,7 @@ import asyncio
 import requests
 import feedparser
 import os
+import ssl
 
 from discord.ext import commands, tasks
 from sos import bigsos
@@ -32,8 +33,9 @@ async def status_task():
     await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
     await asyncio.sleep(5)
 
-@tasks.loop(seconds=10)
+@tasks.loop(minutes=1)
 async def sosup():
+    ssl._create_default_https_context = ssl._create_unverified_context
     with open('time.json', mode='r', encoding='UTF8') as jfile:
         svset = json.load(jfile)
     tokenAPI = jdata["APITOKEN"]
@@ -78,6 +80,11 @@ async def sosup():
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
 
+@sosup.before_loop
+async def before_sosup():
+    print('地震報告啟動...')
+    await bot.wait_until_ready()
+
 @bot.event
 async def on_ready():
     sosup.start()
@@ -90,9 +97,11 @@ async def on_ready():
     print('========OwO========')
     # ------------------------------------------------------------------------------------------------------------------
 
+
 for filename in os.listdir('./cmds'):
     if filename.endswith('.py'):
         bot.load_extension(f'cmds.{filename[:-3]}')
 
 if __name__ == "__main__":
     bot.run(jdata['TOKEN'])
+

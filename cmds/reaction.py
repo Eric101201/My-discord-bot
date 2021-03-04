@@ -149,43 +149,48 @@ class reaction(commands.Cog):
 
                     await channel.send(embed=embed)
 
-            if emoji == "🔒" and user_id != BOT_ID:
+            ydata = yamlhook("channel.yaml").load()
+            if payload.user_id in ydata['USER']:
+                if emoji == "🔒" and user_id != BOT_ID:
+                    message = await channel.fetch_message(message_id)
+                    await message.remove_reaction("🔒", user)
+
+                    channel_log = self.bot.get_channel(LOG_CHANNEL_ID)
+                    text = f"此匿名 `{channel}` 即將關閉, 操作者 {user.mention} 在 {nowtime} 刪除."
+
+                    embed = discord.Embed(
+                        title="關閉匿名!",
+                        description=text,
+                        color=0x0000ff)
+
+                    await channel_log.send(embed=embed)
+
+                    embed = discord.Embed(
+                        title="關閉匿名!",
+                        description=f":tickets: 匿名已關閉,操作者: {user.mention}.",
+                        color=0x0000ff)
+
+                    await channel.send(embed=embed)
+
+                    try:
+                        ydata = yamlhook("channel.yaml").load()
+                        ydata['ID'].remove(payload.message_id)
+                        yamlhook("channel.yaml").Operate('ID', ydata['ID'])
+                    except ValueError:
+                        print("no id")
+
+                    try:
+                        ydata = yamlhook("channel.yaml").load()
+                        ydata['USER'].remove(payload.user_id)
+                        yamlhook("channel.yaml").Operate('USER', ydata['USER'])
+                    except ValueError:
+                        print("not add or return2")
+
+                    await asyncio.sleep(3)
+                    await channel.delete()
+            else:
                 message = await channel.fetch_message(message_id)
                 await message.remove_reaction("🔒", user)
-
-                channel_log = self.bot.get_channel(LOG_CHANNEL_ID)
-                text = f"此匿名 `{channel}` 即將關閉, 操作者 {user.mention} 在 {nowtime} 刪除."
-
-                embed = discord.Embed(
-                    title="關閉匿名!",
-                    description=text,
-                    color=0x0000ff)
-
-                await channel_log.send(embed=embed)
-
-                embed = discord.Embed(
-                    title="關閉匿名!",
-                    description=f":tickets: 匿名已關閉,操作者: {user.mention}.",
-                    color=0x0000ff)
-
-                await channel.send(embed=embed)
-
-                try:
-                    ydata = yamlhook("channel.yaml").load()
-                    ydata['ID'].remove(payload.message_id)
-                    yamlhook("channel.yaml").Operate('ID', ydata['ID'])
-                except ValueError:
-                    print("no id")
-
-                try:
-                    ydata = yamlhook("channel.yaml").load()
-                    ydata['USER'].remove(payload.user_id)
-                    yamlhook("channel.yaml").Operate('USER', ydata['USER'])
-                except ValueError:
-                    print("not add or return2")
-
-                await asyncio.sleep(3)
-                await channel.delete()
 
 def setup(bot):
     bot.add_cog(reaction(bot))

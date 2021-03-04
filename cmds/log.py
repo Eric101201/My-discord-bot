@@ -1,4 +1,4 @@
-
+import discord
 from datetime import datetime
 from discord import Embed
 from discord.ext.commands import Cog
@@ -10,7 +10,7 @@ class Log(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.log_channel = self.bot.get_channel(808976065984200731)
+        self.log_channel = self.bot.get_channel(817062997162721300)
 
     @Cog.listener()
     async def on_user_update(self, before, after):

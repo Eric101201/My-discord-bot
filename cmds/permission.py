@@ -42,6 +42,7 @@ class permission(commands.Cog):
         # console message
         await self.bot.close()
 
+    @commands.has_guild_permissions(administrator=True)
     @commands.command(name='rebot', help='rebot')
     async def rebot(self, ctx):
         """Restarts the bot"""

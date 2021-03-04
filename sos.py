@@ -3,11 +3,9 @@ import discord
 import feedparser
 import requests
 import datetime
-import asyncio
 from pytz import timezone
 
 async def bigsos(channel, API):
-  await asyncio.sleep(20)
   r = requests.get(API)
   eew = r.json()
   inp = eew["records"]["earthquake"][0]
@@ -43,7 +41,6 @@ async def bigsos(channel, API):
   await channel.send(urlicon)
 
 async def smsos(channel, API2):
-  await asyncio.sleep(20)
   r = requests.get(API2)
   eew = r.json()
   inp = eew["records"]["earthquake"][0]
