@@ -1,5 +1,4 @@
 import discord
-import random
 import json
 import sys
 import subprocess
