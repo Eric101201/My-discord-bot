@@ -52,7 +52,7 @@ class help(commands.Cog):
                         inline=False)
         embed.add_field(name='> 管理',
                         value='```'
-                                f'{prefix}clean       |刪除文字 <刪除數量> \n'
+                                f'{prefix}clean       |刪除訊息 <刪除數量> \n'
                                 f'{prefix}kick        |踢出使用者 <tag user> <原因> \n'
                                 f'{prefix}ban         |封鎖使用者 <tag user> <原因> \n'
                                 f'{prefix}unban       |解除封鎖使用者 <tag user> <原因>'

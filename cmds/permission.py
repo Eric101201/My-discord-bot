@@ -82,9 +82,9 @@ class permission(commands.Cog):
     @commands.has_guild_permissions(administrator=True)
     @commands.command(name='clean', help='刪除文字 <刪除數量>')
     async def clean(self, ctx, amount=0):
-        await ctx.channel.purge(limit=amount+1)
+        test = await ctx.channel.purge(limit=amount+1)
         embed = discord.Embed(
-            title=f"你已清除 {amount} 條訊息", colour=(random.choice(jdata['顏色'])))
+            title=f"您嘗試清除{amount}則訊息", description=f"最終清除{len(test)}則訊息", colour=discord.Colour.red())
         await ctx.channel.send(embed=embed)
 
     @commands.has_guild_permissions(administrator=True)
