@@ -87,5 +87,11 @@ class permission(commands.Cog):
             title=f"你已清除 {amount} 條訊息", colour=(random.choice(jdata['顏色'])))
         await ctx.channel.send(embed=embed)
 
+    @commands.has_guild_permissions(administrator=True)
+    @commands.command(hidden=True)
+    async def reply(self, ctx, messageId, *, reply=None):
+        e = await ctx.fetch_message(messageId)
+        await e.reply(reply)
+
 def setup(bot):
     bot.add_cog(permission(bot))

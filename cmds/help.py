@@ -46,7 +46,8 @@ class help(commands.Cog):
                                 f'{prefix}send        |匿名專用<編號> <內容> \n'
                                 f'{prefix}gstart      |抽獎系統 <抽獎倒數時間s m h d> <數量> <抽獎內容> \n'
                                 f'{prefix}vote        |投票功能, <主題> <選項1> <選項2> \n'
-                                f'{prefix}addexp      |增加經驗值 <數字> <tag user>'
+                                f'{prefix}addexp      |增加經驗值 <數字> <tag user> \n'
+                                f'{prefix}reply       |回覆訊息 <訊息ID> <回覆內容>'
                                 '```',
                         inline=False)
         embed.add_field(name='> 管理',
