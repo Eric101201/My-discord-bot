@@ -3,7 +3,7 @@ import json
 
 from discord.ext import commands
 
-with open('reloaem.json', mode='r', encoding='UTF8') as jfile:
+with open('role.json', mode='r', encoding='UTF8') as jfile:
   jdate = json.load(jfile)
 
 class autorole(commands.Cog):
@@ -12,7 +12,7 @@ class autorole(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, data):
-        with open('reloaem.json', mode='r', encoding='UTF8') as jfile:
+        with open('role.json', mode='r', encoding='UTF8') as jfile:
             jdate1 = json.load(jfile)
         try:
             for i in jdate1:
@@ -31,7 +31,7 @@ class autorole(commands.Cog):
     async def on_raw_reaction_remove(self, data):
         guild = self.bot.get_guild(data.guild_id)
         user = guild.get_member(data.user_id)
-        with open('reloaem.json', mode='r', encoding='UTF8') as jfile:
+        with open('role.json', mode='r', encoding='UTF8') as jfile:
             jdate = json.load(jfile)
         for i in jdate:
             message_id = i["message_id"]
