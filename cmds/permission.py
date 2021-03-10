@@ -2,6 +2,7 @@ import discord
 import json
 import sys
 import subprocess
+import asyncio
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 
@@ -91,6 +92,25 @@ class permission(commands.Cog):
     async def reply(self, ctx, messageId, *, reply=None):
         e = await ctx.fetch_message(messageId)
         await e.reply(reply)
+
+    @commands.has_guild_permissions(administrator=True)
+    @commands.command(administrator=True)
+    async def addrole(self, ctx, arg:int, role:int, emoji:str = None):
+      await ctx.message.delete()
+      with open("reloaem.json",mode="r",encoding="utf8") as jfile:
+        jdata = json.load(jfile)
+      if emoji != None:
+        haha={
+          "message_id": arg,
+          "role": role,
+          "emoji": emoji
+          }
+        jdata.append(haha)
+        with open("reloaem.json",mode="w",encoding="utf8") as jfile:
+          json.dump(jdata,jfile,indent=4,ensure_ascii=False)
+        send = await ctx.send("已加入")
+      await asyncio.sleep(10)
+      await send.delete()
 
 def setup(bot):
     bot.add_cog(permission(bot))

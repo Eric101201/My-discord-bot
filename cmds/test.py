@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from pyfiglet import Figlet
 
 prefix = 'w+'
 
@@ -21,6 +22,13 @@ class test(commands.Cog):
         await msg.edit(content=newmsg)
         await ctx.send("edit af")
 
+    @commands.command()
+    async def test(self, ctx, arg):
+
+        f = Figlet(font='slant')
+        ttt = f.renderText(arg)
+        await ctx.send(f'```{ttt}```')
+        print(ttt)
 
 def setup(bot):
     bot.add_cog(test(bot))

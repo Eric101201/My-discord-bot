@@ -29,9 +29,9 @@ class ping(commands.Cog):
         svmem = psutil.virtual_memory()
 
         embed=discord.Embed(title="延遲(PING)", color=ctx.author.colour)
-        embed.add_field(name="Used Ram", value=f"```{get_size(svmem.used)} ({svmem.percent}%)```", inline=False)
-        embed.add_field(name="Bot Ping", value=f"```{round(self.bot.latency*1000)} ms```", inline=True)
-        embed.add_field(name="Sys Ping", value=f"```{round((t2-t1)*1000)} ms```", inline=True)
+        embed.add_field(name="Used Ram", value=f"```py\n{get_size(svmem.used)} ({svmem.percent}%)```", inline=False)
+        embed.add_field(name="Bot Ping", value=f"```py\n{round(self.bot.latency*1000)} ms```", inline=True)
+        embed.add_field(name="Sys Ping", value=f"```py\n{round((t2-t1)*1000)} ms```", inline=True)
         embed.set_footer(text=f"👾{nowtime}")
         await ctx.channel.send(embed=embed)
 

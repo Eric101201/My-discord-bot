@@ -80,14 +80,15 @@ async def sosup():
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
 
-@sosup.before_loop
-async def before_sosup():
-    print('地震報告啟動...')
-    await bot.wait_until_ready()
+@tasks.loop(hours=1)
+async def test():
+    message_channel = bot.get_channel(808976065984200732)
+    await message_channel.send("`TESTRRR 1HOURS`")
 
 @bot.event
 async def on_ready():
     sosup.start()
+    #test.start()
     status_task.start()
     print(">> Bot is online <<")
     print(bot.user.name)
@@ -104,4 +105,3 @@ for filename in os.listdir('./cmds'):
 
 if __name__ == "__main__":
     bot.run(jdata['TOKEN'])
-

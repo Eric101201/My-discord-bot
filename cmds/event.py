@@ -284,37 +284,5 @@ class Event(commands.Cog):
             embed.set_footer(text="製作by.Eric/伊綠")
             await msg.channel.send(embed=embed)
 
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
-        if int(payload.message_id) == 809039528341143603:
-            user = payload.member
-
-            guild = discord.utils.find(
-                lambda g: g.id == int(payload.member.guild.id),
-                self.bot.guilds)
-            if payload.emoji.name == "👦":  #填入反應字串(切記一定要是長這樣的)
-                role = discord.utils.get(guild.roles, name="boy")  #填入身分組名稱
-            elif payload.emoji.name == "😰":  #填入反應字串(切記一定要是長這樣的)
-                role = discord.utils.get(guild.roles, name="中性人")
-            elif payload.emoji.name == "👧":  #填入反應字串
-                role = discord.utils.get(guild.roles, name="girl")  #填入身分組名稱
-            else:
-                pass
-
-            if role is not None:
-                member = discord.utils.find(lambda m: m.id == payload.user_id,
-                                            guild.members)
-
-                if member is not None:
-                    await member.add_roles(
-                        role,
-                        atomic=True,
-                        reason='%s已領取%s身分組' % (member, role))
-                    print("done")
-                else:
-                    print("Member not found")
-            else:
-                print("Role not found")
-
 def setup(bot):
     bot.add_cog(Event(bot))
