@@ -97,7 +97,7 @@ class permission(commands.Cog):
     @commands.command(administrator=True)
     async def addrole(self, ctx, arg:int, role:int, emoji:str = None):
       await ctx.message.delete()
-      with open("reloaem.json",mode="r",encoding="utf8") as jfile:
+      with open("role.json",mode="r",encoding="utf8") as jfile:
         jdata = json.load(jfile)
       if emoji != None:
         haha={
@@ -106,7 +106,7 @@ class permission(commands.Cog):
           "emoji": emoji
           }
         jdata.append(haha)
-        with open("reloaem.json",mode="w",encoding="utf8") as jfile:
+        with open("role.json",mode="w",encoding="utf8") as jfile:
           json.dump(jdata,jfile,indent=4,ensure_ascii=False)
         send = await ctx.send("已加入")
       await asyncio.sleep(10)
