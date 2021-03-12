@@ -3,9 +3,16 @@ import discord
 import feedparser
 import requests
 import datetime
+import json
+import asyncio
 from pytz import timezone
 
-async def bigsos(channel, API):
+with open('setting.json', 'r', encoding='utf8') as jfile:
+  jdata = json.load(jfile)
+
+async def bigsos(channel):
+  tokenAPI = jdata["APITOKEN"]
+  API = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0015-001?Authorization={tokenAPI}"  # 大型地震
   r = requests.get(API)
   eew = r.json()
   inp = eew["records"]["earthquake"][0]
@@ -38,9 +45,10 @@ async def bigsos(channel, API):
     embed.add_field(name=i['desc'], value=i['name'], inline=False)
   embed.set_footer(text="地震報告提供", icon_url='https://media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
   await channel.send(embed=embed)
-  await channel.send(urlicon)
 
-async def smsos(channel, API2):
+async def smsos(channel):
+  tokenAPI = jdata["APITOKEN"]
+  API2 = f"https://opendata.cwb.gov.tw/api/v1/rest/datastore/E-A0016-001?Authorization={tokenAPI}"  # 小型地震
   r = requests.get(API2)
   eew = r.json()
   inp = eew["records"]["earthquake"][0]
@@ -73,7 +81,6 @@ async def smsos(channel, API2):
     embed.add_field(name=i['desc'], value=i['name'], inline=False)
   embed.set_footer(text="地震報告提供", icon_url='https://media.discordapp.net/attachments/345147297539162115/732527875839885312/ROC_CWB.png')
   await channel.send(embed=embed)
-  await channel.send(urlicon)
 
 async def NEWMOHW(channel, url):
   rss = feedparser.parse(url)
@@ -82,6 +89,8 @@ async def NEWMOHW(channel, url):
   link = rss.entries[0]['link']
   covtime = rss["entries"][0]["published"]
   text = re.sub("<.*?>", "", owow)
+  text1 = '%.500s' % text
+  text2 = f'{text1}....(詳細內容請[點擊此處]({link})觀看)'
   tz = timezone('Asia/Taipei')
   nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M")
   embed = discord.Embed(title=f'{oaoa}', color=discord.Colour.blue())
@@ -89,7 +98,7 @@ async def NEWMOHW(channel, url):
                     icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
   embed.add_field(name='新聞連結', value=f'[點擊此處]({link})', inline=True)
   embed.add_field(name='發布時間', value=f'{covtime}', inline=True)
-  embed.add_field(name='內容', value=f'{text}', inline=False)
+  embed.add_field(name='內容', value=f'{text2}', inline=False)
   embed.set_footer(text=f'衛生福利部RSS服務提供• {nowtime} ',
                     icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
   await channel.send(embed=embed)
