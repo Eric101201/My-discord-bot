@@ -31,8 +31,8 @@ class say(commands.Cog):
                              f'匿名內容：{msg}\n')
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command(name='OWO', help='test')
-    async def OWO(self, ctx, owo:int, arg:str):
+    @commands.command(name='dm', help='test')
+    async def dm(self, ctx, owo:int, arg:str):
         member = discord.utils.find(lambda m: m.id == owo, ctx.guild.members)
         print(arg)
         await member.send(arg)

@@ -9,18 +9,18 @@ class test(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def editmessage(self, ctx, id: int, *, newmsg: str):
-        """Edits a message sent by the bot"""
+    async def editmessage(self, ctx, chann: int, id: int, *, newmsg: str):
         try:
-            msg = await ctx.channel.fetch_message(id)
+            cha = self.bot.get_channel(chann)
+            msg = await cha.fetch_message(id)
         except discord.errors.NotFound:
-            await ctx.send("Couldn't find a message with an ID of `{}` in this channel".format(id))
+            await ctx.send(f'查無此`{id}`')
             return
         if msg.author != ctx.guild.me:
-            await ctx.send("That message was not sent by me")
+            await ctx.send("那個訊息TMD不是我說的")
             return
-        await msg.edit(content=newmsg)
-        await ctx.send("edit af")
+        owo = await msg.edit(content=newmsg)
+        await ctx.send(f'修改完畢[點我傳送AWA]({owo.jump_url})')
 
     @commands.command()
     async def test(self, ctx, arg):

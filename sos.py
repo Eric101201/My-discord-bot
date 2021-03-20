@@ -91,6 +91,7 @@ async def NEWMOHW(channel, url):
   text = re.sub("<.*?>", "", owow)
   text1 = '%.500s' % text
   text2 = f'{text1}....(詳細內容請[點擊此處]({link})觀看)'
+  text3 = re.sub("&nbsp;", "", text2)
   tz = timezone('Asia/Taipei')
   nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M")
   embed = discord.Embed(title=f'{oaoa}', color=discord.Colour.blue())
@@ -98,7 +99,7 @@ async def NEWMOHW(channel, url):
                     icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
   embed.add_field(name='新聞連結', value=f'[點擊此處]({link})', inline=True)
   embed.add_field(name='發布時間', value=f'{covtime}', inline=True)
-  embed.add_field(name='內容', value=f'{text2}', inline=False)
+  embed.add_field(name='內容', value=f'{text3}', inline=False)
   embed.set_footer(text=f'衛生福利部RSS服務提供• {nowtime} ',
                     icon_url='https://images-ext-1.discordapp.net/external/xrfvu0X7I_vcTEmPlp0x5JqmlM9D17azlTEbYTOVFlM/https/upload.wikimedia.org/wikipedia/commons/thumb/a/a3/ROC_Ministry_of_Health_and_Welfare_Seal.svg/1200px-ROC_Ministry_of_Health_and_Welfare_Seal.svg.png?width=677&height=677')
   await channel.send(embed=embed)

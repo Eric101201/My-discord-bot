@@ -5,6 +5,7 @@ import subprocess
 import asyncio
 from discord.ext import commands
 from discord.ext.commands import has_permissions
+from logger import logger3
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -19,6 +20,7 @@ class permission(commands.Cog):
     async def reload(self, ctx, extension):
         self.bot.reload_extension(f"cmds.{extension}")
         # console message
+        await logger3('discord', f"{extension} 已重新載入。")
         await ctx.send(f"`{extension} 已重新載入。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -26,6 +28,7 @@ class permission(commands.Cog):
     async def load(self, ctx, extension):
         self.bot.load_extension(f"cmds.{extension}")
         # console message
+        await logger3('discord', f"{extension} 已載入。")
         await ctx.send(f"`{extension} 已載入。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -33,6 +36,7 @@ class permission(commands.Cog):
     async def unload(self, ctx, extension):
         self.bot.unload_extension(f"cmds.{extension}")
         # console message
+        await logger3('discord', f"{extension} 已移除。")
         await ctx.send(f"`{extension} 已移除。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -40,12 +44,14 @@ class permission(commands.Cog):
     async def bye(self, ctx):
         await ctx.send("`機器人關機中...`")
         # console message
+        await logger3('discord', "機器人關機")
         await self.bot.close()
 
     @commands.has_guild_permissions(administrator=True)
     @commands.command(name='rebot', help='rebot')
     async def rebot(self, ctx):
         """Restarts the bot"""
+        await logger3('discord', "機器人重啟")
         await ctx.send("Restarting...")
         await self.bot.logout()
         subprocess.call([sys.executable, "bot.py"])
@@ -89,12 +95,26 @@ class permission(commands.Cog):
 
     @commands.has_guild_permissions(administrator=True)
     @commands.command(hidden=True)
-    async def reply(self, ctx, messageId, *, reply=None):
-        e = await ctx.fetch_message(messageId)
-        await e.reply(reply)
+    async def reply(self, ctx, chaid: int, messageId: int, tag: str, *, reply=None):
+        cha = self.bot.get_channel(chaid)
+        e = await cha.fetch_message(messageId)
+        if tag == 'True':
+            owo = await e.reply(reply, mention_author=True)
+            embed = discord.Embed(title='已回覆訊息', color=discord.Colour.orange())
+            embed.add_field(name='回復訊息連結', value=f'[點擊此處]({e.jump_url})', inline=True)
+            embed.add_field(name='訊息連結', value=f'[點擊此處]({owo.jump_url})', inline=True)
+            embed.add_field(name='是否tag', value=f'{tag}', inline=False)
+            await ctx.send(embed=embed)
+        elif tag == 'False':
+            owo = await e.reply(reply, mention_author=False)
+            embed = discord.Embed(title='已回覆訊息', color=discord.Colour.orange())
+            embed.add_field(name='回復訊息連結', value=f'[點擊此處]({e.jump_url})', inline=True)
+            embed.add_field(name='訊息連結', value=f'[點擊此處]({owo.jump_url})', inline=True)
+            embed.add_field(name='是否tag', value=f'{tag}', inline=False)
+            await ctx.send(embed=embed)
 
     @commands.has_guild_permissions(administrator=True)
-    @commands.command(administrator=True)
+    @commands.command()
     async def addrole(self, ctx, arg:int, role:int, emoji:str = None):
       await ctx.message.delete()
       with open("role.json",mode="r",encoding="utf8") as jfile:
@@ -111,6 +131,21 @@ class permission(commands.Cog):
         send = await ctx.send("已加入")
       await asyncio.sleep(10)
       await send.delete()
+
+    @commands.has_guild_permissions(administrator=True)
+    @commands.command()
+    async def editmsg(self, ctx, chann: int, id: int, *, newmsg: str):
+        try:
+            cha = self.bot.get_channel(chann)
+            msg = await cha.fetch_message(id)
+        except discord.errors.NotFound:
+            await ctx.send(f'查無此`{id}`')
+            return
+        if msg.author != ctx.guild.me:
+            await ctx.send("那個訊息TMD不是我說的")
+            return
+        await msg.edit(content=newmsg)
+        await ctx.send(f'修改完畢 [點我傳送AWA]({msg.jump_url})')
 
 def setup(bot):
     bot.add_cog(permission(bot))

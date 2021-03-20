@@ -8,6 +8,12 @@ import platform
 from random import randint
 from discord.ext import commands
 from datetime import datetime
+from discord import (
+    Forbidden,
+    HTTPException
+)
+
+from logger import logger2, logger3
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -43,13 +49,15 @@ async def level_up(users, user, message):
         return int(experience ** (1/4))
     return int(experience ** (1/4))
 
+auto_publish_channels = 809034639016460338, 809034393355157514
+
 class Event(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-
+        await logger3('discord.event', f"{member} 加入 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
 
@@ -142,7 +150,7 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-
+        await logger3('discord.event', f"{member} 退出 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
 
@@ -234,6 +242,7 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg):
+        await logger2('discord.event', f"{msg.guild.name} > {msg.channel.name} > {msg.author} > {msg.content}")
 
         if msg.author.bot == False:
             with open('users.json', 'r') as f:
@@ -246,6 +255,16 @@ class Event(commands.Cog):
             with open('users.json', 'w') as f:
                 json.dump(users, f, ensure_ascii=False, indent=4)
 
+        if msg.channel.id in auto_publish_channels:
+            try:
+                await msg.publish()
+            except Forbidden as e:
+                message_channel = self.bot.get_channel(808976065984200732)
+                await message_channel.send(f'`{e.text}`\n請檢察頻道設定')
+            except HTTPException as e:
+                message_channel = self.bot.get_channel(808976065984200732)
+                await message_channel.send(f'`{e.text}`')
+
         if msg.content.lower().startswith(
                 '蹦假崩') and msg.author != self.bot.user:
             await msg.delete()
@@ -257,7 +276,7 @@ class Event(commands.Cog):
             await msg.channel.send('**伊綠告訴本鼠連假要去露營**')
 
         if msg.content.lower().startswith(
-                '蹦豬') and msg.author != self.bot.user:
+                '阿蹦豬') and msg.author != self.bot.user:
             await msg.delete()
             await msg.channel.send('**蹦蹦告訴本鼠他要去睡覺了！**')
 
