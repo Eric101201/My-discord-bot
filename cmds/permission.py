@@ -5,7 +5,7 @@ import subprocess
 import asyncio
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from logger import logger3
+from logger import log
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -20,7 +20,7 @@ class permission(commands.Cog):
     async def reload(self, ctx, extension):
         self.bot.reload_extension(f"cmds.{extension}")
         # console message
-        await logger3('discord', f"{extension} 已重新載入。")
+        await log('discord.command', f"{extension} 已重新載入。")
         await ctx.send(f"`{extension} 已重新載入。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -28,7 +28,7 @@ class permission(commands.Cog):
     async def load(self, ctx, extension):
         self.bot.load_extension(f"cmds.{extension}")
         # console message
-        await logger3('discord', f"{extension} 已載入。")
+        await log('discord.command', f"{extension} 已載入。")
         await ctx.send(f"`{extension} 已載入。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -36,7 +36,7 @@ class permission(commands.Cog):
     async def unload(self, ctx, extension):
         self.bot.unload_extension(f"cmds.{extension}")
         # console message
-        await logger3('discord', f"{extension} 已移除。")
+        await log('discord.command', f"{extension} 已移除。")
         await ctx.send(f"`{extension} 已移除。`")
 
     @commands.has_guild_permissions(administrator=True)
@@ -44,14 +44,14 @@ class permission(commands.Cog):
     async def bye(self, ctx):
         await ctx.send("`機器人關機中...`")
         # console message
-        await logger3('discord', "機器人關機")
+        await log('discord.command', "機器人關機")
         await self.bot.close()
 
     @commands.has_guild_permissions(administrator=True)
     @commands.command(name='rebot', help='rebot')
     async def rebot(self, ctx):
         """Restarts the bot"""
-        await logger3('discord', "機器人重啟")
+        await log('discord.command', "機器人重啟")
         await ctx.send("Restarting...")
         await self.bot.logout()
         subprocess.call([sys.executable, "bot.py"])
@@ -61,7 +61,7 @@ class permission(commands.Cog):
     @has_permissions(manage_roles=True, ban_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await ctx.send(f'已踢出 {member.name} 用戶 原因: {reason}')
-        await member.kick(eason=reason)
+        await member.kick(reason=reason)
 
     @commands.command(name='ban', help='封鎖使用者 <tag user> <原因>')
     @commands.has_guild_permissions(administrator=True)

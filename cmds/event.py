@@ -13,7 +13,7 @@ from discord import (
     HTTPException
 )
 
-from logger import logger2, logger3
+from logger import msglog, log
 
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
@@ -57,7 +57,7 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        await logger3('discord.event', f"{member} 加入 {member.guild.name}伺服器 id:{member.id}")
+        await log('discord.event', f"{member} 加入 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
 
@@ -143,14 +143,14 @@ class Event(commands.Cog):
 
         embed.set_footer(text=(random.choice(jdata['加入aaa'])))
         await channel.send(member.mention, embed=embed)
-        role = discord.utils.get(member.guild.roles, name="Player")
+        role = discord.utils.get(member.guild.roles, name="未驗證")
         await member.add_roles(role)
         print(f"歡迎加入{member} 已給予:{role}身分組  您加入時間: \n" + "加入時間: " +
               txt.format(h, m, s) + "/" + txt2.format(y, M, d, g))
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        await logger3('discord.event', f"{member} 退出 {member.guild.name}伺服器 id:{member.id}")
+        await log('discord.event', f"{member} 退出 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
 
@@ -242,7 +242,11 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg):
-        await logger2('discord.event', f"{msg.guild.name} > {msg.channel.name} > {msg.author} > {msg.content}")
+        if msg.author.bot == False:
+            try:
+                await msglog('msglogger', f'{msg.guild.name} > {msg.author} > {msg.content}')
+            except AttributeError:
+                await msglog('私訊logger', f'{msg.author} > {msg.content}')
 
         if msg.author.bot == False:
             with open('users.json', 'r') as f:

@@ -10,7 +10,7 @@ from discord.ext import commands, tasks
 from sos import bigsos
 from sos import smsos
 from sos import NEWMOHW
-from logger import logger3
+from logger import log
 
 intents = discord.Intents.all()
 
@@ -88,8 +88,8 @@ async def test():
 
 @bot.event
 async def on_ready():
-    await logger3('discord', "-"*10)
-    await logger3('discord', "bot Loading...")
+    await log('discord', "-"*10)
+    await log('discord', "bot Loading...")
     sosup.start()
     #test.start()
     status_task.start()
@@ -99,7 +99,7 @@ async def on_ready():
     print(f'prefix:{prefix}')
     print(str(len(bot.guilds)) + " servers")
     print('========OwO========')
-    await logger3('discord', ">> Bot is online <<")
+    await log('discord', ">> Bot is online <<")
     # ------------------------------------------------------------------------------------------------------------------
 
 for filename in os.listdir('./cmds'):
