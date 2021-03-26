@@ -1,13 +1,12 @@
 import discord
 import json
-import time
-import random
 import psutil
 import platform
+import datetime
 
+from pytz import timezone
 from random import randint
 from discord.ext import commands
-from datetime import datetime
 from discord import (
     Forbidden,
     HTTPException
@@ -57,188 +56,52 @@ class Event(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        await log('discord.event', f"{member} 加入 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
-
         await update_data(users, member)
-
         with open('users.json', 'w') as f:
             json.dump(users, f, ensure_ascii=False, indent=4)
 
+        await log('discord.event', f"{member} 加入 {member.guild.name}伺服器 id:{member.id}")
+
         channel = self.bot.get_channel(int(jdata['Join_channel']))
-
-        _weekday = {
-            0: '星期一',
-            1: '星期二',
-            2: '星期三',
-            3: '星期四',
-            4: '星期五',
-            5: '星期六',
-            6: '星期日'
-        }
-
-        #格林威治天文臺時間
-        t = time.gmtime(time.time())
-
-        #月份天數陣列
-        day = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-        #轉成代數
-        y = t.tm_year
-        M = t.tm_mon
-        d = t.tm_mday
-        h = t.tm_hour + 8
-        m = t.tm_min
-        s = t.tm_sec
-
-        #判斷潤平年
-        if y % 400 == 0:
-            day[2] = 29
-        elif y % 100 == 0:
-            day[2] = 28
-        elif y % 4 == 0:
-            day[2] = 29
-        else:
-            day[2] = 28
-
-#處裡跨月跨年狀況
-        d = d + int(h / 24)
-        h = h % 24
-        tm = day[M]
-        M = M + int(d / tm)
-        d = d % tm
-        y = y + int(M / 12)
-        M = M % 12
-
-        #s 秒
-        #m 分
-        #h 時
-        #d 日
-        #M 月
-        #y 年
-
-        g = (_weekday[datetime.today().weekday()])
-        txt = "{}:{}:{}"
-        txt2 = "{}年{}月{}日 {}"
-        print(f"歡迎加入{member}您加入時間: \n" + txt.format(h, m, s) + "/" +
-              txt2.format(y, M, d, g))
-
+        tz = timezone('Asia/Taipei')
+        nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
         embed = discord.Embed(
-            title="", description="", color=(random.choice(jdata['顏色'])))
+            title="", description="", color=discord.Color.blue())
         embed.set_thumbnail(url=member.avatar_url)
-        embed.set_author(
-            name="OwO Bot",
-            url="https://discord.gg/nRa2994",
-            icon_url=
-            "https://images-ext-1.discordapp.net/external/x7kxTszr-e7WXPCkD11lhepLD457nLcMleTA4B1t8kM/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/636559032324325417/280943367acac65988c95de80ef5a1e2.webp?width=677&height=677"
-        )
         embed.add_field(
-            name='歡迎加入同樂群組',
-            value='歡迎您加入同樂群組,跟我們大家一起玩OwO!\n\n'
-            f':woman_raising_hand:加入成員名稱:  {member.mention}\n:clock3:加入時間: ' +
-            txt.format(h, m, s) + "\n" + ':calendar_spiral: 加入日期: ' +
-            txt2.format(y, M, d, g),
+            name=f'歡迎加入{member.guild.name}',
+            value=f'加入成員名稱:  {member.mention}\n加入時間: {nowtime}',
             inline=False)
-
-        embed.set_footer(text=(random.choice(jdata['加入aaa'])))
+        embed.add_field(name="伺服器人數：", value=f"{member.guild.member_count}", inline=False)
         await channel.send(member.mention, embed=embed)
         role = discord.utils.get(member.guild.roles, name="未驗證")
         await member.add_roles(role)
-        print(f"歡迎加入{member} 已給予:{role}身分組  您加入時間: \n" + "加入時間: " +
-              txt.format(h, m, s) + "/" + txt2.format(y, M, d, g))
+
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        await log('discord.event', f"{member} 退出 {member.guild.name}伺服器 id:{member.id}")
         with open('users.json', 'r') as f:
             users = json.load(f)
-
         users.pop(str(member.id))
-
         with open('users.json', 'w') as f:
             json.dump(users, f, ensure_ascii=False, indent=4)
 
+        await log('discord.event', f"{member} 退出 {member.guild.name}伺服器 id:{member.id}")
+
         channel = self.bot.get_channel(int(jdata['Leave_channel']))
-
-        _weekday = {
-            0: '星期一',
-            1: '星期二',
-            2: '星期三',
-            3: '星期四',
-            4: '星期五',
-            5: '星期六',
-            6: '星期日'
-        }
-
-        #格林威治天文臺時間
-        t = time.gmtime(time.time())
-
-        #月份天數陣列
-        day = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-
-        #轉成代數
-        y = t.tm_year
-        M = t.tm_mon
-        d = t.tm_mday
-        h = t.tm_hour + 8
-        m = t.tm_min
-        s = t.tm_sec
-
-        #判斷潤平年
-        if y % 400 == 0:
-            day[2] = 29
-        elif y % 100 == 0:
-            day[2] = 28
-        elif y % 4 == 0:
-            day[2] = 29
-        else:
-            day[2] = 28
-
-
-#處裡跨月跨年狀況
-        d = d + int(h / 24)
-        h = h % 24
-        tm = day[M]
-        M = M + int(d / tm)
-        d = d % tm
-        y = y + int(M / 12)
-        M = M % 12
-
-        #s 秒
-        #m 分
-        #h 時
-        #d 日
-        #M 月
-        #y 年
-
-        g = (_weekday[datetime.today().weekday()])
-        txt = "{} {}:{}"
-        txt2 = "{}年{}月{}日 {}"
-        print(f"{member} 退出伺服器 " + txt.format(h, m, s) + "/" +
-              txt2.format(y, M, d, g))
-
-        embed1 = discord.Embed(
-            title="", description="", color=(random.choice(jdata['顏色'])))
-        embed1.set_thumbnail(url=member.avatar_url)
-        embed1.set_author(
-            name="OwO Bot",
-            url="https://discord.gg/nRa2994",
-            icon_url=
-            "https://images-ext-1.discordapp.net/external/x7kxTszr-e7WXPCkD11lhepLD457nLcMleTA4B1t8kM/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/636559032324325417/280943367acac65988c95de80ef5a1e2.webp?width=677&height=677"
-        )
-        embed1.add_field(
+        tz = timezone('Asia/Taipei')
+        nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M:%S")
+        embed = discord.Embed(
+            title="", description="", color=discord.Color.blue())
+        embed.set_thumbnail(url=member.avatar_url)
+        embed.add_field(
             name='QAQ',
-            value='\n\n'
-            f'{member.mention}退出同樂了:tired_face:....\n:clock3:退出時間: ' +
-            txt.format(h, m, s) + "\n" + ':calendar_spiral:退出日期: ' +
-            txt2.format(y, M, d, g),
+            value=f'**{member.name}退出了{member.guild.name}. \n退出時間: {nowtime}**.',
             inline=False)
-
-        embed1.set_footer(
-            text=(random.choice(jdata['加入aaa'])),
-        )
-        await channel.send(embed=embed1)
+        embed.add_field(name="伺服器人數：", value=f"{member.guild.member_count}", inline=False)
+        await channel.send(embed=embed)
 
     @commands.Cog.listener()
     async def on_message(self, msg):
@@ -292,7 +155,6 @@ class Event(commands.Cog):
 
             guild = msg.guild
             embed = discord.Embed()
-            # embed.set_thumbnail(url=guild.icon_url)
             embed.set_author(name=guild.name, icon_url=guild.icon_url)
             embed.add_field(name="CPU名稱", value=f"{uname.processor}", inline=True)
             embed.add_field(name="CPU使用量", value=f"`{psutil.cpu_percent(percpu=False, interval=1)}%`", inline=True)
