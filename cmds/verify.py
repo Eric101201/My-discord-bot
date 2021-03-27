@@ -30,22 +30,30 @@ class verify(commands.Cog):
         await ctx.send(embed=e)
 
         def check(m):
-            return m.content == code
+            if m.author == ctx.author:
+                return m.content
 
-        try:
-            await self.bot.wait_for('message', check=check, timeout=30.0)
-        except asyncio.TimeoutError:
-            e = discord.Embed(title='30秒時間到，請重新輸入指令取得驗證碼.',
-                        description='**NOTE: 一定要驗證才能進入喔❤❤**', color=discord.Color.green())
+        while True:
+            try:
+                msg = await self.bot.wait_for('message', check=check, timeout=30.0)
+                if msg.content == code:
+                     e = discord.Embed(color=discord.Color.green())
+                     await ctx.author.remove_roles(unverified)
+                     e.add_field(name='您已驗證成功!!', value='您現在可以進入伺服器聊天了.')
+                     await ctx.send(embed=e)
+                     await ctx.author.add_roles(verify)
+                     return True
+                else:
+                    e = discord.Embed(color=discord.Color.green())
+                    e.add_field(name='您輸入錯誤的驗證碼!!', value=f'請重新驗證. \n **{code}**')
+                    await ctx.send(embed=e)
 
-            await ctx.send(embed=e)
+            except asyncio.TimeoutError:
+                e = discord.Embed(title='30秒時間到，請重新輸入指令取得驗證碼.',
+                            description='**NOTE: 一定要驗證才能進入喔❤❤**', color=discord.Color.green())
 
-        else:
-            e = discord.Embed(color=discord.Color.green())
-            await ctx.author.remove_roles(unverified)
-            e.add_field(name='您已驗證成功!!', value='您現在可以進入伺服器聊天了.')
-            await ctx.send(embed=e)
-            await ctx.author.add_roles(verify)
+                await ctx.send(embed=e)
+                return True
 
 
 def setup(bot):
