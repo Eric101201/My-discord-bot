@@ -18,8 +18,9 @@ class help(commands.Cog):
 
             embed = discord.Embed(title="指令列表", description="", color=ctx.author.color)
             embed.add_field(name='》一般用戶使用OwO',
-                            value=f'> `{prefix}help`  指令查詢 \n'
+                            value=f'> `w-help`  指令查詢 \n'
                                   f'> `{prefix}help admin`  管理員指令查詢 \n'
+                                  f'> `{prefix}help voice`  動態語音指令查詢 \n'
                                   f'> `{prefix}info`  機器人狀態 \n'
                                   f'> `{prefix}ping`  機器人延遲 \n'
                                   f'> `{prefix}google`  Google搜尋 <搜尋內容> \n'
@@ -78,6 +79,26 @@ class help(commands.Cog):
                                   f'```',
                             inline=False)
 
+            embed.add_field(name="About", value=f"我的指令 `{prefix}`", inline=False)
+            embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
+
+            await ctx.send(embed=embed)
+
+        elif arg == "voice":
+            tz = timezone('Asia/Taipei')
+            nowtime = datetime.now(tz).strftime("%Y/%m/%d %H:%M")
+
+            embed = discord.Embed(title="指令列表", description="》動態語音頻道指令", color=ctx.author.color)
+            embed.add_field(name='> 指令',
+                            value='```'
+                                  f'w-voice 上鎖　　　　|上鎖房間 \n'
+                                  f'w-voice 解鎖　　　　|解鎖房間 \n'
+                                  f'w-voice 名子　　　　|更改房間名子 <名子> \n'
+                                  f'w-voice 限制　　　　|禁止某人進入房間 <tag user> \n'
+                                  f'w-voice 解除限制　　|解除某人進入房間 <tag user> \n'
+                                  f'w-voice 數量　　　　|頻道最大人數 <數字> '
+                                  '```',
+                            inline=False)
             embed.add_field(name="About", value=f"我的指令 `{prefix}`", inline=False)
             embed.set_footer(text=f'👾 使用者: {str(ctx.author)}  在 {nowtime} 請求的資料')
 
