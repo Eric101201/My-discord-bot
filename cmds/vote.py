@@ -14,7 +14,6 @@ class vote(commands.Cog):
         embed.add_field(name="1️⃣", value=f'{list_1}', inline=False)
         embed.add_field(name="2️⃣", value=f'{list_2}', inline=False)
 
-        #await ctx.send(embed=embed)
         msg = await ctx.send(embed=embed)
         await msg.add_reaction("1️⃣")
         await msg.add_reaction("2️⃣")
