@@ -1,12 +1,16 @@
 import discord
 import json
+import os
 import asyncio
 import requests
+import random
 import feedparser
-import os
+import re
 import ssl
 
+from datetime import datetime
 from discord.ext import commands, tasks
+from bs4 import BeautifulSoup
 from sos import bigsos
 from sos import smsos
 from sos import NEWMOHW
@@ -17,13 +21,8 @@ intents = discord.Intents.all()
 with open('setting.json', 'r', encoding='utf8') as jfile:
     jdata = json.load(jfile)
 
-prefix = 'q/'
-class sosCommand( commands.DefaultHelpCommand ):
-  def __init__( self,**options ):
-    super().__init__( **options )
-    self.command_attrs["name"] = "sos"
-
-bot = commands.Bot(command_prefix=prefix, help_command = sosCommand(), intents=intents, owner_ids="593666614717841419")
+prefix = 'w+'
+bot = commands.Bot(command_prefix=prefix, help_command=None, intents=intents, owner_ids="593666614717841419")
 
 @tasks.loop(seconds=1)
 async def status_task():
@@ -34,7 +33,7 @@ async def status_task():
     await bot.change_presence(status=discord.Status.idle,activity=discord.Activity(type=discord.ActivityType.watching,name=f'我正在 {(str(len(bot.guilds)))}' + "個伺服器做奴隸"))
     await asyncio.sleep(5)
 
-@tasks.loop(minutes=1)
+@tasks.loop(minutes=3)
 async def sosup():
     ssl._create_default_https_context = ssl._create_unverified_context
     with open('time.json', mode='r', encoding='UTF8') as jfile:
@@ -61,21 +60,21 @@ async def sosup():
     for i in range(len(site)):
         if site[i] == 'BIGSOS':
             if originTime != svset[site[i]]:
-                channel = bot.get_channel(808976066353037364)
+                channel = bot.get_channel(809034393355157514)
                 svset[site[i]] = originTime
                 await bigsos(channel)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'SMSOS':
             if originTime2 != svset[site[i]]:
-                channel = bot.get_channel(808976066353037364)
+                channel = bot.get_channel(809034393355157514)
                 svset[site[i]] = originTime2
                 await smsos(channel)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
                     json.dump(svset, outfile, ensure_ascii=False, indent=4)
         if site[i] == 'NEWMOHW':
             if newsID not in svset[site[i]]:
-                channel = bot.get_channel(808976066353037364)
+                channel = bot.get_channel(809034639016460338)
                 svset[site[i]].append(newsID)
                 await NEWMOHW(channel, MOHW)
                 with open('time.json', 'w', encoding='UTF8') as outfile:
@@ -91,13 +90,14 @@ async def on_ready():
     await log('discord', "-"*10)
     await log('discord', "bot Loading...")
     sosup.start()
-    #test.start()
+    test.start()
     status_task.start()
+    channel = bot.get_channel(808976066353037364)
+    embed2=discord.Embed(title=">>Bot on ready<<", color=(random.choice(jdata['顏色'])))
+    await channel.send(embed=embed2)
     print(">> Bot is online <<")
     print(bot.user.name)
     print(bot.user.id)
-    print(f'prefix:{prefix}')
-    print(str(len(bot.guilds)) + " servers")
     print('========OwO========')
     await log('discord', ">> Bot is online <<")
     # ------------------------------------------------------------------------------------------------------------------
@@ -107,4 +107,5 @@ for filename in os.listdir('./cmds'):
         bot.load_extension(f'cmds.{filename[:-3]}')
 
 if __name__ == "__main__":
-    bot.run(jdata['TOKEN'])
+    bot.run(jdata['TOKEN2'])
+

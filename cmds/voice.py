@@ -19,9 +19,9 @@ class voice(commands.Cog):
                     await channel3.set_permissions(member, connect=True)
                     await member.move_to(channel3)
                     try:
-                        ydata = yamlhook("channel.yaml").load()
+                        ydata = yamlhook("vchannel.yaml").load()
                         ydata['VOICE'].append(channel3.id)
-                        yamlhook("channel.yaml").Operate('VOICE', ydata['VOICE'])
+                        yamlhook("vchannel.yaml").Operate('VOICE', ydata['VOICE'])
                     except ValueError:
                         print("not add or return1")
 
@@ -30,13 +30,13 @@ class voice(commands.Cog):
 
                     await self.bot.wait_for('voice_state_update', check=check)
 
-                    ydata = yamlhook("channel.yaml").load()
+                    ydata = yamlhook("vchannel.yaml").load()
                     if channel3.id in ydata['VOICE']:
                         await channel3.delete()
                         try:
-                            ydata = yamlhook("channel.yaml").load()
+                            ydata = yamlhook("vchannel.yaml").load()
                             ydata['VOICE'].remove(channel3.id)
-                            yamlhook("channel.yaml").Operate('VOICE', ydata['VOICE'])
+                            yamlhook("vchannel.yaml").Operate('VOICE', ydata['VOICE'])
                         except ValueError:
                             print("not add or return1")
 

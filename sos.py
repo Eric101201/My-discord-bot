@@ -89,9 +89,12 @@ async def NEWMOHW(channel, url):
   link = rss.entries[0]['link']
   covtime = rss["entries"][0]["published"]
   text = re.sub("<.*?>", "", owow)
-  text1 = '%.500s' % text
-  text2 = f'{text1}....(詳細內容請[點擊此處]({link})觀看)'
-  text3 = re.sub("&nbsp;", "", text2)
+  text1 = re.sub("&nbsp;", "", text)
+  text2= '%.800s' % text1
+  if len(text2) == 800:
+    text3 = f'{text2}　　....([詳細內容請點擊此處觀看]({link}))'
+  else:
+    text3 = text2
   tz = timezone('Asia/Taipei')
   nowtime = datetime.datetime.now(tz).strftime("%Y/%m/%d %H:%M")
   embed = discord.Embed(title=f'{oaoa}', color=discord.Colour.blue())

@@ -91,12 +91,12 @@ class help(commands.Cog):
             embed = discord.Embed(title="指令列表", description="》動態語音頻道指令", color=ctx.author.color)
             embed.add_field(name='> 指令',
                             value='```'
-                                  f'w-voice 上鎖　　　　|上鎖房間 \n'
-                                  f'w-voice 解鎖　　　　|解鎖房間 \n'
-                                  f'w-voice 名子　　　　|更改房間名子 <名子> \n'
-                                  f'w-voice 限制　　　　|禁止某人進入房間 <tag user> \n'
-                                  f'w-voice 解除限制　　|解除某人進入房間 <tag user> \n'
-                                  f'w-voice 數量　　　　|頻道最大人數 <數字> '
+                                  f'{prefix}voice 上鎖　　　　|上鎖房間 \n'
+                                  f'{prefix}voice 解鎖　　　　|解鎖房間 \n'
+                                  f'{prefix}voice 名子　　　　|更改房間名子 <名子> \n'
+                                  f'{prefix}voice 限制　　　　|禁止某人進入房間 <tag user> \n'
+                                  f'{prefix}voice 解除限制　　|解除某人進入房間 <tag user> \n'
+                                  f'{prefix}voice 數量　　　　|頻道最大人數 <數字> '
                                   '```',
                             inline=False)
             embed.add_field(name="About", value=f"我的指令 `{prefix}`", inline=False)

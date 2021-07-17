@@ -1,5 +1,4 @@
 import discord
-
 from discord.ext import commands
 
 class admin(commands.Cog):
@@ -21,7 +20,6 @@ class admin(commands.Cog):
         msg = await ctx.send(embed=embed)
         await msg.add_reaction("📩")
         await ctx.message.delete()
-
 
 def setup(bot):
     bot.add_cog(admin(bot))

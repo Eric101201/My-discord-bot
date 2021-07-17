@@ -150,7 +150,7 @@ class reaction(commands.Cog):
                     await channel.send(embed=embed)
 
             ydata = yamlhook("channel.yaml").load()
-            if payload.user_id in ydata['USER']:
+            if payload.user_id in ydata['USER'] or 808976065354530826 in list(map(lambda x: x.id, payload.member.roles)):
                 if emoji == "🔒" and user_id != BOT_ID:
                     message = await channel.fetch_message(message_id)
                     await message.remove_reaction("🔒", user)

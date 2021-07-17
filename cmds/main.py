@@ -24,7 +24,7 @@ class Main(commands.Cog):
         ctx.guild.me: discord.PermissionOverwrite(read_messages=True, send_messages=True),
         user: discord.PermissionOverwrite(read_messages=True, send_messages=True),
         }
-        channel = await ctx.guild.create_text_channel(name=str(ctx.author) + f'-{name}', overwrites=overwrites, category=self.bot.get_channel(798926957135527966))
+        channel = await ctx.guild.create_text_channel(name=str(ctx.author) + f'-{name}', overwrites=overwrites, category=self.bot.get_channel(811237659908636752))
         await ctx.channel.send(f"您已開啟了新的頻道 <#{channel.id}> 。")
         await channel.send(f"{ctx.author.mention} 您已開啟新的頻道.")
         await channel.send("***小提示:此頻道只能交給管理員關閉,輸入完畢請標註***  `@♕蹦蹦老大♕` ***並等待管理員處理***")
